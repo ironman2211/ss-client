@@ -7,6 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -56,6 +57,7 @@ const Form = () => {
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
 
+  const theme = useTheme();
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
     const formData = new FormData();
@@ -113,8 +115,8 @@ const Form = () => {
         <form onSubmit={handleSubmit}>
           <Box
             display="grid"
-            gap="30px"
-            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+            gap="35px"
+            gridTemplateColumns="repeat(1, minmax(0, 1fr))"
             sx={{
               "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
@@ -230,10 +232,14 @@ const Form = () => {
               fullWidth
               type="submit"
               sx={{
-                m: "2rem 0",
+                m: "3rem 0",
                 p: "1rem",
-                backgroundColor: "#324ea8",
+                backgroundColor:theme.palette.mode === "dark" ? palette.common.white:palette.common.black,
                 color: palette.background.alt,
+                '&:hover': {
+                  backgroundColor:palette.common.black,
+                  color: '#3c52b2',
+              },
               }}
             >
               {isLogin ? "LOGIN" : "REGISTER"}
