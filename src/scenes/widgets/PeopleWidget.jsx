@@ -19,7 +19,7 @@ const PeopleWidget = ({user}) => {
   const dark = palette.neutral.dark;
   const { _id } = useSelector((state) => state.user);
   const patchFriend = async () => {
-    const response = await apiService.updateFriend(_id,user.id,token);
+    const response = await apiService.updateFriend(_id,user._id,token);
     const data = await response.json();
     dispatch(setFriends({ friends: data }));
   };
