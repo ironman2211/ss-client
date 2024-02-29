@@ -6,13 +6,13 @@ import LightLogo from "../../assets/light.png";
 import DarkLogo from "../../assets/dark.png";
 import FlexBetween from "components/FlexBetween";
 import SocialMe from "../../assets/socialme.svg";
+import Loading from "components/Loading";
 
 const LoginPage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   return (
-    <Box
-      backgroundColor={theme.palette.background.alt}
+    <Box  backgroundColor={theme.palette.background.alt}
       style={{
         height: "100%",
         width: "100%",

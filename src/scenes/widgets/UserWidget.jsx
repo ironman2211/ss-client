@@ -28,6 +28,7 @@ const UserWidget = ({ userId, picturePath }) => {
     const response = await apiService.getUser(_id,token)
     const data = await response.json();
     setUser(data);
+    console.log(data);
   };
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const UserWidget = ({ userId, picturePath }) => {
     posts,
     description
   } = user;
-  if(editable) 
+  if(true) 
   return (
     <WidgetWrapper>
       <FlexCenter gap="2rem" padding="1rem" >
@@ -76,7 +77,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
 
         </Typography>
-        {
+        {/* {
           editable && (
             <ManageAccountsOutlined cursor="pointer" onClick={()=>setEditable(false)}
              />)
@@ -84,7 +85,7 @@ const UserWidget = ({ userId, picturePath }) => {
         {
            !editable && (
             <EditOutlined cursor="pointer" />)
-        }
+        } */}
 
 
 

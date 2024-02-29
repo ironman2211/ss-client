@@ -36,6 +36,9 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
             navigate(`/profile/${friendId}`);
             navigate(0);
           }}
+          style={{
+            cursor:"pointer"
+          }}
         >
           <Typography
             color={main}

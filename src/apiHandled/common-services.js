@@ -1,5 +1,4 @@
 const API_BASE_URL = "https://social-media-1-0-0.onrender.com";
-const PlaceHolderImage = "assets/placeholder.jpg";
 export const apiService = {
   register: async (formData) => {
     return await fetch(`${API_BASE_URL}/auth/register`, {
@@ -96,7 +95,6 @@ export const apiService = {
     });
   },
   getImages: (image) =>`${API_BASE_URL}/assets/${image}`,
-  getAltImages:()=>`${PlaceHolderImage}`,
 
 
 };

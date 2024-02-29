@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import { apiService } from "apiHandled/common-services";
+import { Box, Typography } from "@mui/material";
+import WidgetWrapper from "components/WidgetWrapper";
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
@@ -16,9 +18,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   };
 
   const getUserPosts = async () => {
-    const response = await apiService.getUserPosts(userId,token);
+    const response = await apiService.getUserPosts(userId, token);
     const data = await response.json();
-   
+
     dispatch(setPosts({ posts: data }));
   };
 
@@ -61,6 +63,15 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             comments={comments}
           />
         )
+      )}
+      {posts.length == 0 ? (
+        <Box>
+          <WidgetWrapper>
+            <b>Post Unavailable : (</b>
+          </WidgetWrapper>
+        </Box>
+      ) : (
+        ""
       )}
     </>
   );
