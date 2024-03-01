@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
-import FlexWrap from "components/FlexWrap";
+import {FlexWrap} from "components/Flex";
 import PeopleWidget from "./PeopleWidget";
 import { Box, CircularProgress } from "@mui/material";
 import { apiService } from "apiHandled/common-services";

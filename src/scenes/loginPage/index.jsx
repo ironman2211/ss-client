@@ -1,16 +1,16 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
 import { LinkedIn } from "@mui/icons-material";
-import FlexCenter from "components/FlexCenter";
+import {FlexBetween} from "components/Flex";
 import LightLogo from "../../assets/light.png";
 import DarkLogo from "../../assets/dark.png";
-import FlexBetween from "components/FlexBetween";
 import SocialMe from "../../assets/socialme.svg";
 import Loading from "components/Loading";
 
 const LoginPage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+
   return (
     <Box  backgroundColor={theme.palette.background.alt}
       style={{

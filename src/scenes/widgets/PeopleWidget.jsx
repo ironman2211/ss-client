@@ -3,7 +3,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { PersonAddOutlined } from "@mui/icons-material";
 import { Typography, Button, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
-import FlexCenter from "components/FlexCenter";
+import {FlexCenter} from "components/Flex";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";

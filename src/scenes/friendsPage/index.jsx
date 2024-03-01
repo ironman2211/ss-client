@@ -6,10 +6,10 @@ import People from "scenes/widgets/People";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 
 const FriendPage = () => {
-  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { _id, picturePath } = useSelector((state) => state.user);
 
-  return (
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    return (
     <Box>
       <Navbar />
       <Box

@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state";
 import Dropzone from "react-dropzone";
-import FlexBetween from "components/FlexBetween";
+import {FlexBetween} from "../../components/Flex";
 import { apiService } from "apiHandled/common-services";
 import Loading from "components/Loading";
 

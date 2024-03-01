@@ -6,7 +6,7 @@ const UserImage = ({ image, size = "60px" }) => {
   return (
     <Box width={size} height={size}>
       <ImgAndPlaceHolder
-        style={{ objectFit: "cover", borderRadius: "50%",padding: ".4rem", }}
+        style={{ objectFit: "cover", borderRadius: "50%", border:"2px solid gray"}}
         width={size}
         height={size}
         alt="image_unavailable"

@@ -1,5 +1,5 @@
 import React from 'react'
-import PlaceHolderImage from "../assets/placeholder.png";
+import PlaceHolderImage from "../assets/place1.jpg";
 
 const ImgAndPlaceHolder = ({src,alt,...props}) => {
   const handleImageError = (event) => {

@@ -14,20 +14,19 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const getPosts = async () => {
     const response = await apiService.getAllPosts(token);
     const data = await response.json();
+    console.log(data);
     dispatch(setPosts({ posts: data }));
   };
 
   const getUserPosts = async () => {
     const response = await apiService.getUserPosts(userId, token);
     const data = await response.json();
-
     dispatch(setPosts({ posts: data }));
   };
 
   useEffect(() => {
     if (isProfile) {
       getUserPosts();
-      console.log(posts);
     } else {
       getPosts();
     }
@@ -47,7 +46,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           userPicturePath,
           likes,
           comments,
-          occupation,
+          occupation,createdAt
         }) => (
           <PostWidget
             key={_id}
@@ -61,6 +60,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
+            createdAt={createdAt}
           />
         )
       )}

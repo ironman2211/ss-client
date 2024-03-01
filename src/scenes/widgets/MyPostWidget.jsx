@@ -12,7 +12,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import FlexBetween from "components/FlexBetween";
+import { FlexBetween, FlexCenter, FlexStart } from "components/Flex";
 import Dropzone from "react-dropzone";
 import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -20,19 +20,22 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import { apiService } from "apiHandled/common-services";
+import LinearProgress from "@mui/material/LinearProgress";
 
-const MyPostWidget = ({ picturePath }) => {
+const MyPostWidget = () => {
   const dispatch = useDispatch();
-  const [isImage, setIsImage] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [isImage, setIsImage] = useState(false); // Option to upload photo or not
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
   const { palette } = useTheme();
-  const { _id } = useSelector((state) => state.user);
+  const { _id, picturePath } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
+    setUploading(true);
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", post);
@@ -40,12 +43,12 @@ const MyPostWidget = ({ picturePath }) => {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }
-
-    const response = await apiService.addPost(formData,token);
+    const response = await apiService.addPost(formData, token);
     const posts = await response.json();
     dispatch(setPosts({ posts }));
     setImage(null);
     setPost("");
+    setUploading(false);
     window.location.reload();
   };
 
@@ -65,7 +68,7 @@ const MyPostWidget = ({ picturePath }) => {
           }}
         />
       </FlexBetween>
-      {isImage && (
+      {isImage && !uploading && (
         <Box
           border={`1px solid ${medium}`}
           borderRadius="5px"
@@ -112,31 +115,37 @@ const MyPostWidget = ({ picturePath }) => {
 
       <Divider sx={{ margin: "1.25rem 0" }} />
 
-      <FlexBetween>
-        <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
-          <ImageOutlined sx={{ color: mediumMain }} />
-          <Typography
-            color={mediumMain}
-            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+      {!uploading ? (
+        <FlexBetween>
+          <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+            <ImageOutlined sx={{ color: mediumMain }} />
+            <Typography
+              color={mediumMain}
+              sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+            >
+              Image
+            </Typography>
+          </FlexBetween>
+
+          <Button
+            disabled={!post}
+            onClick={handlePost}
+            sx={{
+              color: palette.background.default,
+              backgroundColor: palette.primary.dark,
+              borderRadius: "3rem",
+            }}
           >
-            Image
-          </Typography>
+            POST
+          </Button>
         </FlexBetween>
+      ) : (
+        <>
+          <p>Uploading . . .</p>
 
-      
-
-        <Button
-          disabled={!post}
-          onClick={handlePost}
-          sx={{
-            color: palette.background.default,
-            backgroundColor: palette.primary.dark,
-            borderRadius: "3rem",
-          }}
-        >
-          POST
-        </Button>
-      </FlexBetween>
+          <LinearProgress />
+        </>
+      )}
     </WidgetWrapper>
   );
 };

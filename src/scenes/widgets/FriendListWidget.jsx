@@ -1,8 +1,7 @@
 import PeopleIcon from "@mui/icons-material/People";
 import { Box, Divider, Typography, useTheme } from "@mui/material";
 import { apiService } from "apiHandled/common-services";
-import FlexBetween from "components/FlexBetween";
-import FlexCenter from "components/FlexCenter";
+import {FlexCenter,FlexBetween} from "components/Flex";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect } from "react";

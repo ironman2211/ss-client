@@ -3,10 +3,10 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
-import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import CheckIcon from '@mui/icons-material/Check';
 import { apiService } from "apiHandled/common-services";
+import { FlexBetween } from "./Flex";
 const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

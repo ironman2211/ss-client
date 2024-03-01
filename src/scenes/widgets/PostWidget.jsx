@@ -1,17 +1,39 @@
+import * as React from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Input from "@mui/material/Input";
+
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
+  OtherHouses,
   ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Button, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { apiService } from "apiHandled/common-services";
-import FlexBetween from "components/FlexBetween";
+import { FlexBetween, FlexCenter } from "components/Flex";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import { isNonMobileScreens, timeAgo } from "utils/helper";
+import Comment from "components/Comment";
 
 const PostWidget = ({
   postId,
@@ -23,7 +45,8 @@ const PostWidget = ({
   userPicturePath,
   likes,
   comments,
-  occupation
+  createdAt,
+  occupation,
 }) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
@@ -35,9 +58,10 @@ const PostWidget = ({
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+  const [userComment, setUserComment] = useState("");
 
   const patchLike = async () => {
-    const response = await apiService.updateLike(postId,token,loggedInUserId);
+    const response = await apiService.updateLike(postId, token, loggedInUserId);
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
   };
@@ -46,7 +70,23 @@ const PostWidget = ({
     const updatedPost = await response.json();
     dispatch(setPost({ post: updatedPost }));
     window.location.reload();
-  }
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    handleDelete();
+    setOpen(false);
+  };
+
+  const addComment = () => {
+    console.log(userComment);
+    //APi to add comment
+  };
 
   return (
     <WidgetWrapper m="1.3rem 0">
@@ -72,7 +112,12 @@ const PostWidget = ({
       )}
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
-          <FlexBetween gap="0.3rem">
+          <FlexBetween
+            gap="0.3rem"
+            sx={{
+              margin: "-.6rem",
+            }}
+          >
             <IconButton onClick={patchLike}>
               {isLiked ? (
                 <FavoriteOutlined sx={{ color: primary }} />
@@ -83,7 +128,7 @@ const PostWidget = ({
             <Typography>{likeCount}</Typography>
           </FlexBetween>
 
-          <FlexBetween gap="0.3rem">
+          <FlexBetween gap="0.3rem" margin=".3rem 0">
             <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
@@ -94,30 +139,83 @@ const PostWidget = ({
         <FlexBetween gap="0.3rem">
           <IconButton>
             <ShareOutlined />
-
           </IconButton>
-          {_id === postUserId && (<Button
-            onClick={() => handleDelete()}
-          variant="contained" color="error" sx={{
-            textTransform: "capitalize"
-          }}>
-            Delete Post
-          </Button>)}
+          {_id === postUserId && (
+            <IconButton>
+              <DeleteIcon
+                color="error"
+                onClick={handleClickOpen}
+                cursor="pointer"
+              />
+            </IconButton>
+          )}
         </FlexBetween>
+      </FlexBetween>
+      <FlexBetween>
+        <Typography>{timeAgo(createdAt)}</Typography>
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">
+          <FlexBetween style={{ width: "100%" }}>
+            <Input
+              label="Last Name"
+              name="lastName"
+              style={{
+                width: "90%",
+                padding:".4rem",
+              }}
+              value={userComment}
+              onChange={(e) => setUserComment(e.target.value)}
+              sx={{ gridColumn: "span 2" }}
+              placeholder="Add a comment..."
+            />
+            <Button onClick={addComment}>Comment</Button>
+          </FlexBetween>
+
           {comments.map((comment, i) => (
-            <Box key={`${name}-${i}`}>
-              <Divider />
-              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
-              </Typography>
-            </Box>
+            <Comment />
           ))}
           <Divider />
         </Box>
       )}
+      <Dialog open={open} onClose={handleClose}>
+        <div
+          style={{
+            padding: "1rem",
+          }}
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            textAlign="center"
+            fontSize="1.4rem"
+          >
+            {"Delete this post ?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description" fontSize="1rem">
+              Are you sure you want to delete this post?
+            </DialogContentText>
+          </DialogContent>
+          <FlexBetween
+            style={{
+              width: "15rem",
+              margin: "1rem auto",
+            }}
+          >
+            <Button variant="outlined" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleClose}
+              autoFocus
+            >
+              Delete
+            </Button>
+          </FlexBetween>
+        </div>
+      </Dialog>
     </WidgetWrapper>
   );
 };

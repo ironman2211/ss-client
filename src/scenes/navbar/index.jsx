@@ -1,6 +1,8 @@
-import LightLogo from "../../assets/light.png"; 
+import LightLogo from "../../assets/light.png";
 import DarkLogo from "../../assets/dark.png";
 import { useState } from "react";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 import {
   Box,
   IconButton,
@@ -11,6 +13,7 @@ import {
   FormControl,
   useTheme,
   useMediaQuery,
+  Button,
 } from "@mui/material";
 import {
   Search,
@@ -24,14 +27,19 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
-import FlexBetween from "components/FlexBetween";
+import {FlexBetween} from "components/Flex";
+import ButtonOne from "components/common-comps/ButtonOne";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isDark = () => {
+    return theme.palette.mode === "dark";
+  };
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -46,39 +54,21 @@ const Navbar = () => {
     dispatch(setLogout());
   };
   return (
-    <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+    <FlexBetween padding=".1rem 6%" backgroundColor={alt}>
       <FlexBetween gap="1.75rem">
-        <img src={theme.palette.mode === "dark" ? LightLogo : DarkLogo}
+        <img
+          src={isDark() ? LightLogo : DarkLogo}
           onClick={() => navigate("/home")}
-          style={{
-            height:"4rem",
-            width:"5rem"
-          }}
+          style={{ height: "5rem", width: "6rem", cursor: "pointer" }}
         />
-     
-        {isNonMobileScreens && (
-          <FlexBetween
-            backgroundColor={neutralLight}
-            borderRadius="9px"
-            gap="3rem"
-            padding="0.1rem 1.5rem"
-          >
-            <InputBase placeholder="Search..." />
-            <IconButton>
-              <Search />
-            </IconButton>
-          </FlexBetween>
-        )}
       </FlexBetween>
 
       {/* DESKTOP NAV */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
-          {/* change color if in people */}
           <PeopleAltIcon
             sx={{ fontSize: "25px" }}
             onClick={() => navigate("/people")}
-        
             cursor="pointer"
             style={
               window.location.pathname === "/people"
@@ -86,41 +76,15 @@ const Navbar = () => {
                 : { color: theme.palette.mode }
             }
           />
-          {/* <Message sx={{ fontSize: "25px" }} onClick={() => navigate("/messages")}  cursor="pointer"
-          style={window.location.pathname === "/messages" ? { color: "#324ea8" } : { color: "#000000" }}
-          />
-          */}
           <IconButton onClick={() => dispatch(setMode())}>
-            {theme.palette.mode === "dark" ? (
+            {isDark() ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <FormControl variant="standard" value={fullName}>
-            <Select
-              value={fullName}
-              sx={{
-                backgroundColor: neutralLight,
-                width: "150px",
-                borderRadius: "0.25rem",
-                p: "0.25rem 1rem",
-                "& .MuiSvgIcon-root": {
-                  pr: "0.25rem",
-                  width: "3rem",
-                },
-                "& .MuiSelect-select:focus": {
-                  backgroundColor: neutralLight,
-                },
-              }}
-              input={<InputBase />}
-            >
-              <MenuItem value={fullName}>
-                <Typography>{fullName}</Typography>
-              </MenuItem>
-              <MenuItem onClick={() => logOut()}>Log Out</MenuItem>
-            </Select>
-          </FormControl>
+          {console.log(isDark())}
+          <ButtonOne content="Log Out" mode={isDark()} onClick={()=>logOut()} />
         </FlexBetween>
       ) : (
         <IconButton
@@ -176,38 +140,10 @@ const Navbar = () => {
               style={
                 window.location.pathname === "/people"
                   ? { color: "#324ea8" }
-                  : { color: "#000000" }
+                  : { color: theme.palette.mode }
               }
             />
-            {/* <Message sx={{ fontSize: "25px" }} onClick={() => navigate("/messages")}  cursor="pointer"
-          style={window.location.pathname === "/messages" ? { color: "#324ea8" } : { color: "#000000" }}
-          /> */}
-
-            <FormControl variant="standard" value={fullName}>
-              <Select
-                value={fullName}
-                sx={{
-                  backgroundColor: neutralLight,
-                  width: "150px",
-                  borderRadius: "0.25rem",
-                  p: "0.25rem 1rem",
-                  "& .MuiSvgIcon-root": {
-                    pr: "0.25rem",
-                    width: "3rem",
-                  },
-                  "& .MuiSelect-select:focus": {
-                    backgroundColor: neutralLight,
-                  },
-                }}
-                input={<InputBase />}
-              >
-                <MenuItem value={fullName}>
-                  <Typography>{fullName}</Typography>
-                </MenuItem>
-
-                <MenuItem onClick={() => logOut()}>Log Out</MenuItem>
-              </Select>
-            </FormControl>
+            <ButtonOne content="Log Out" mode={isDark()} onClick={()=>logOut()} />
           </FlexBetween>
         </Box>
       )}
