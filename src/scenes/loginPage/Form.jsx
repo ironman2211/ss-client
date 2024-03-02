@@ -15,9 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "state";
 import Dropzone from "react-dropzone";
-import {FlexBetween} from "../../components/Flex";
+import { FlexBetween } from "../../components/Flex";
 import { apiService } from "apiHandled/common-services";
 import Loading from "components/Loading";
+import AlertModal from "components/common-comps/AlertModal";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -58,9 +59,11 @@ const Form = () => {
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(false);
   const theme = useTheme();
   const toggleLoading = (val) => {
-    setLoading(val);
+    setAlert(!val);
+    setLoading(val)
   };
 
   const register = async (values, onSubmitProps) => {
@@ -80,7 +83,11 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     const loggedInResponse = await apiService.login(values);
-    const loggedIn = await loggedInResponse.json();
+    if(loggedInResponse){
+      setLoading(true)
+      console.log(alert);
+    }
+      const loggedIn = await loggedInResponse.json();
 
     onSubmitProps.resetForm();
     if (loggedIn) {
@@ -99,7 +106,6 @@ const Form = () => {
     toggleLoading(true);
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
-  
   };
 
   return (
@@ -276,6 +282,7 @@ const Form = () => {
           </form>
         )}
       </Formik>
+      {alert && <AlertModal title={"User doesn't exist "} description="www" />}
 
       <Loading open={loading} />
     </>

@@ -48,7 +48,8 @@ const LoginPage = () => {
         </FlexBetween>
       </Box>
       <div style={{
-        display:"flex"
+        display:"flex",
+        width:"100%",
       }}>
         <img
           src={SocialMe}
@@ -61,9 +62,9 @@ const LoginPage = () => {
           }}
         />
         <Box
-          width={isNonMobileScreens ? "45%" : "93%"}
+          width={isNonMobileScreens ? "45%" : "100%"}
           p="3rem"
-          m="0rem 5rem auto auto"
+          m={isNonMobileScreens?"0rem 5rem auto auto":"0"}
           borderRadius=".5rem"
 
           // backgroundColor={theme.palette.background.alt}

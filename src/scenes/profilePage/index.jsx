@@ -26,7 +26,7 @@ const ProfilePage = () => {
         gap="2rem"
         justifyContent="center"
       >
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}  display="flex" flexDirection="column" gap="2rem">
           <UserWidget userId={userId} />
           <FriendListWidget userId={userId} />
         </Box>

@@ -1,9 +1,5 @@
 import * as React from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+
 import Input from "@mui/material/Input";
 
 import {
@@ -34,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { isNonMobileScreens, timeAgo } from "utils/helper";
 import Comment from "components/Comment";
+import DeleteModal from "components/common-comps/DeleteModal";
 
 const PostWidget = ({
   postId,
@@ -78,8 +75,8 @@ const PostWidget = ({
     setOpen(true);
   };
 
-  const handleClose = () => {
-    handleDelete();
+  const handleClose = (close) => {
+    if (close == 1) handleDelete();
     setOpen(false);
   };
 
@@ -162,7 +159,7 @@ const PostWidget = ({
               name="lastName"
               style={{
                 width: "90%",
-                padding:".4rem",
+                padding: ".4rem",
               }}
               value={userComment}
               onChange={(e) => setUserComment(e.target.value)}
@@ -178,44 +175,7 @@ const PostWidget = ({
           <Divider />
         </Box>
       )}
-      <Dialog open={open} onClose={handleClose}>
-        <div
-          style={{
-            padding: "1rem",
-          }}
-        >
-          <DialogTitle
-            id="alert-dialog-title"
-            textAlign="center"
-            fontSize="1.4rem"
-          >
-            {"Delete this post ?"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description" fontSize="1rem">
-              Are you sure you want to delete this post?
-            </DialogContentText>
-          </DialogContent>
-          <FlexBetween
-            style={{
-              width: "15rem",
-              margin: "1rem auto",
-            }}
-          >
-            <Button variant="outlined" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleClose}
-              autoFocus
-            >
-              Delete
-            </Button>
-          </FlexBetween>
-        </div>
-      </Dialog>
+      <DeleteModal open={open} handleClose={handleClose} />
     </WidgetWrapper>
   );
 };
