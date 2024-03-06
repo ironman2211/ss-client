@@ -81,21 +81,22 @@ const Form = () => {
       toggleLoading(false);
     }
   };
-  const handleSuccess = (credentialResponse) => {
+  const handleSuccess = async (credentialResponse) => {
     // Handle the successful login here
     console.log("Google login successful", credentialResponse);
-    apiService
-      .signInByGoogle(credentialResponse.credential)
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from your backend server
-        console.log("Login successful, backend response:", data);
-        navigate("/home");
+   const reponse= await apiService.signInByGoogle(credentialResponse.credential);
+   const savedUser = await reponse.json();
+
+   if (savedUser) {
+    dispatch(
+      setLogin({
+        user: savedUser.user,
+        token: savedUser.token,
       })
-      .catch((error) => {
-        // Handle errors in communicating with your backend server
-        console.error("Error exchanging authorization code:", error);
-      });
+    );
+    toggleLoading(false);
+    navigate("/home");
+  }
   };
 
   const handleError = () => {

@@ -1,4 +1,6 @@
-const API_BASE_URL = "https://social-media-1-0-0.onrender.com";
+// const API_BASE_URL = "https://social-media-1-0-0.onrender.com";
+const API_BASE_URL = "http://localhost:3001";
+
 export const apiService = {
   register: async (formData) => {
     return await fetch(`${API_BASE_URL}/auth/register`, {
@@ -14,10 +16,11 @@ export const apiService = {
     });
   },
   signInByGoogle: async (token) => {
+    console.log(token);
     return await fetch(`${API_BASE_URL}/auth/login/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(token),
+      body: JSON.stringify({ token: token }),
     });
   },
   getAllUsers: async (token) => {
@@ -101,7 +104,5 @@ export const apiService = {
       body: formData,
     });
   },
-  getImages: (image) =>`${API_BASE_URL}/assets/${image}`,
-
-
+  getImages: (image) => `${API_BASE_URL}/assets/${image}`,
 };
