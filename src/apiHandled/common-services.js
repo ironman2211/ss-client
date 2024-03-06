@@ -13,6 +13,13 @@ export const apiService = {
       body: JSON.stringify(values),
     });
   },
+  signInByGoogle: async (token) => {
+    return await fetch(`${API_BASE_URL}/auth/login/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(token),
+    });
+  },
   getAllUsers: async (token) => {
     return fetch(`${API_BASE_URL}/users`, {
       method: "GET",

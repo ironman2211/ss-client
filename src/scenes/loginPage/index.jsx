@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
 import { LinkedIn } from "@mui/icons-material";
-import {FlexBetween} from "components/Flex";
+import { FlexBetween } from "components/Flex";
 import LightLogo from "../../assets/light.png";
 import DarkLogo from "../../assets/dark.png";
 import SocialMe from "../../assets/socialme.svg";
@@ -12,7 +12,8 @@ const LoginPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   return (
-    <Box  backgroundColor={theme.palette.background.alt}
+    <Box
+      backgroundColor={theme.palette.background.alt}
       style={{
         height: "100%",
         width: "100%",
@@ -40,31 +41,40 @@ const LoginPage = () => {
               fontSize: "1.2rem",
               fontWeight: "600",
             }}
-          > Social Space /
-           <b style={{
-            color:"gray"
-           }}> Sign In To Continue</b>
+          >
+            {" "}
+            Social Space /
+            <b
+              style={{
+                color: "gray",
+              }}
+            >
+              {" "}
+              Sign In To Continue
+            </b>
           </p>
         </FlexBetween>
       </Box>
-      <div style={{
-        display:"flex",
-        width:"100%",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+        }}
+      >
         <img
           src={SocialMe}
           style={{
             height: "40%",
             width: "40%",
-            padding:"2rem",
-            display:isNonMobileScreens?"block":"none",
-            marginLeft:"5%"
+            padding: "2rem",
+            display: isNonMobileScreens ? "block" : "none",
+            marginLeft: "5%",
           }}
         />
         <Box
-          width={isNonMobileScreens ? "45%" : "100%"}
+          width={isNonMobileScreens ? "40%" : "100%"}
           p="3rem"
-          m={isNonMobileScreens?"0rem 5rem auto auto":"0"}
+          m={isNonMobileScreens ? "0rem 5rem auto auto" : "0"}
           borderRadius=".5rem"
 
           // backgroundColor={theme.palette.background.alt}

@@ -7,7 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-
+import GoogleIcon from "@mui/icons-material/Google";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -19,6 +19,7 @@ import { FlexBetween } from "../../components/Flex";
 import { apiService } from "apiHandled/common-services";
 import Loading from "components/Loading";
 import AlertModal from "components/common-comps/AlertModal";
+import { GoogleLogin } from "@react-oauth/google";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -63,7 +64,7 @@ const Form = () => {
   const theme = useTheme();
   const toggleLoading = (val) => {
     setAlert(!val);
-    setLoading(val)
+    setLoading(val);
   };
 
   const register = async (values, onSubmitProps) => {
@@ -80,14 +81,34 @@ const Form = () => {
       toggleLoading(false);
     }
   };
+  const handleSuccess = (credentialResponse) => {
+    // Handle the successful login here
+    console.log("Google login successful", credentialResponse);
+    apiService
+      .signInByGoogle(credentialResponse.credential)
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from your backend server
+        console.log("Login successful, backend response:", data);
+        navigate("/home");
+      })
+      .catch((error) => {
+        // Handle errors in communicating with your backend server
+        console.error("Error exchanging authorization code:", error);
+      });
+  };
+
+  const handleError = () => {
+    console.log("Login Failed");
+  };
 
   const login = async (values, onSubmitProps) => {
     const loggedInResponse = await apiService.login(values);
-    if(loggedInResponse){
-      setLoading(true)
+    if (loggedInResponse) {
+      setLoading(true);
       console.log(alert);
     }
-      const loggedIn = await loggedInResponse.json();
+    const loggedIn = await loggedInResponse.json();
 
     onSubmitProps.resetForm();
     if (loggedIn) {
@@ -249,7 +270,7 @@ const Form = () => {
                 fullWidth
                 type="submit"
                 sx={{
-                  m: "3rem 0",
+                  mt: "3rem",
                   p: "1rem",
                   backgroundColor:
                     theme.palette.mode === "dark"
@@ -264,6 +285,15 @@ const Form = () => {
               >
                 {isLogin ? "LOGIN" : "REGISTER"}
               </Button>
+              <Box
+                fullWidth
+                type="submit"
+                sx={{
+                  m: "2rem 0",
+                }}
+              >
+                <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+              </Box>
               <Typography
                 onClick={() => {
                   setPageType(isLogin ? "register" : "login");

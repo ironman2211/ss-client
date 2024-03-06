@@ -3,12 +3,11 @@ import HomePage from "scenes/homePage";
 import FriendPage from "scenes/friendsPage";
 import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
-import LandingPage from "scenes/landingPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { themeSettings } from "./theme";
+import { themeSettings } from "./assets/theme";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -21,12 +20,9 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            
-          {/* <Route path="/" element={<LandingPage />} /> */}
             <Route path="/" element={<LoginPage />} />
             <Route path="/home" element={isAuth ? <HomePage /> : <Navigate to="/" />}/>
             <Route path="/people" element={isAuth ? <FriendPage /> : <Navigate to="/" />} />
-            {/* <Route path="/messages" element={isAuth ? <MessagesPage /> : <Navigate to="/" />} /> */}
             <Route path="/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="/" />} />
           </Routes>
         </ThemeProvider>
