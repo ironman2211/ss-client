@@ -1,5 +1,5 @@
-// const API_BASE_URL = "https://social-media-1-0-0.onrender.com";
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = "https://social-media-1-0-0.onrender.com";
+// const API_BASE_URL = "http://localhost:3001";
 
 export const apiService = {
   register: async (formData) => {
