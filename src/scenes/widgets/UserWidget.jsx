@@ -21,7 +21,6 @@ const UserWidget = ({ userId }) => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
   const getUser = async () => {
-    console.log(currUser._id !== userId);
     if (currUser._id !== userId) {
       const response = await apiService.getUser(userId, token);
       const data = await response.json();

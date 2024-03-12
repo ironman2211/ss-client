@@ -82,8 +82,6 @@ const Form = () => {
     }
   };
   const handleSuccess = async (credentialResponse) => {
-    // Handle the successful login here
-    console.log("Google login successful", credentialResponse);
    const reponse= await apiService.signInByGoogle(credentialResponse.credential);
    const savedUser = await reponse.json();
 
@@ -100,14 +98,14 @@ const Form = () => {
   };
 
   const handleError = () => {
-    console.log("Login Failed");
+    // console.log("Login Failed");
   };
 
   const login = async (values, onSubmitProps) => {
     const loggedInResponse = await apiService.login(values);
     if (loggedInResponse) {
       setLoading(true);
-      console.log(alert);
+      // console.log(alert);
     }
     const loggedIn = await loggedInResponse.json();
 

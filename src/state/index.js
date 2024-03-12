@@ -15,8 +15,6 @@ export const authSlice = createSlice({
       state.mode = state.mode === "light" ? "dark" : "light";
     },
     setLogin: (state, action) => {
-      console.log(action.payload);
-      console.log(state);
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
@@ -29,7 +27,7 @@ export const authSlice = createSlice({
       if (state.user) {
         state.user.friends = action.payload.friends;
       } else {
-        console.error("user friends non-existent :(");
+        // console.error("user friends non-existent :(");
       }
     },
     setPosts: (state, action) => {

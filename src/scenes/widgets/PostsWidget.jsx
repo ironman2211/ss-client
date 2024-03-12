@@ -14,7 +14,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const getPosts = async () => {
     const response = await apiService.getAllPosts(token);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     dispatch(setPosts({ posts: data }));
   };
 

@@ -81,7 +81,7 @@ const PostWidget = ({
   };
 
   const addComment = () => {
-    console.log(userComment);
+    // console.log(userComment);
     //APi to add comment
   };
 

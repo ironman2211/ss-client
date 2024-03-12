@@ -83,7 +83,6 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          {console.log(isDark())}
           <ButtonOne content="Log Out" mode={isDark()} onClick={()=>logOut()} />
         </FlexBetween>
       ) : (
