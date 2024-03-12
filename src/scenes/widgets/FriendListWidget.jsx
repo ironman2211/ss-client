@@ -1,5 +1,5 @@
 import PeopleIcon from "@mui/icons-material/People";
-import { Box, Divider, Typography, useTheme } from "@mui/material";
+import { Box, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { apiService } from "apiHandled/common-services";
 import {FlexCenter,FlexBetween} from "components/Flex";
 import Friend from "components/Friend";
@@ -13,6 +13,7 @@ const FriendListWidget = ({ userId }) => {
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const getFriends = async () => {
     const response = await apiService.getUserFriends(userId, token);
@@ -26,9 +27,8 @@ const FriendListWidget = ({ userId }) => {
 
   return (
     <WidgetWrapper>
-      <FlexBetween gap="2rem" padding="1rem">
+      <FlexBetween gap="2rem" padding="1rem .5rem">
         <Typography
-          variant="h3"
           fontWeight="500"
           sx={{
             cursor: "pointer",
@@ -37,6 +37,7 @@ const FriendListWidget = ({ userId }) => {
             alignItems: "center",
             gap: "1rem",
             justifyContent: "center",
+            fontSize:isNonMobileScreens?"1.3rem":".9rem"
           }}
         >
           <PeopleIcon />

@@ -1,5 +1,5 @@
 import { PersonAddOutlined } from "@mui/icons-material";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
@@ -13,6 +13,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const { palette } = useTheme();
   // const primaryLight = palette.primary.light;

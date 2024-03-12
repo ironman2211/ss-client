@@ -4,6 +4,7 @@ import Navbar from "scenes/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
 import People from "scenes/widgets/People";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import WidgetWrapper from "components/WidgetWrapper";
 
 const FriendPage = () => {
   const { _id, picturePath } = useSelector((state) => state.user);
