@@ -18,6 +18,7 @@ const FriendListWidget = ({ userId }) => {
   const getFriends = async () => {
     const response = await apiService.getUserFriends(userId, token);
     const data = await response.json();
+    console.log(data);
     dispatch(setFriends({ friends: data }));
   };
 
@@ -58,7 +59,7 @@ const FriendListWidget = ({ userId }) => {
         ))}
         <FlexCenter>
           <Typography>
-            {friends.length == 0 ? "You Don't Have Any Friends" : ""}
+            {friends.length === 0 ? "You Don't Have Any Friends" : ""}
           </Typography>
         </FlexCenter>
       </Box>
