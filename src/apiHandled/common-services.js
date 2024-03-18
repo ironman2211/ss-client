@@ -1,5 +1,5 @@
-const API_BASE_URL = "https://social-media-1-0-0-1.onrender.com";
-// const API_BASE_URL = "http://localhost:3001";
+// const API_BASE_URL = "https://social-media-1-0-0-1.onrender.com";
+const API_BASE_URL = "http://localhost:3001";
 
 export const apiService = {
   register: async (formData) => {
@@ -104,9 +104,19 @@ export const apiService = {
     });
   },
   getImages: (image) => {
-    if (image.includes("http") || image.includes("https")) {
+    if (image?.includes("http") || image?.includes("https")) {
       return image;
     }
     return `${API_BASE_URL}/assets/${image}`;
+  },
+  addComment: async (postId, token, commentBody) => {
+    return fetch(`${API_BASE_URL}/posts/${postId}/comment`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentBody),
+    });
   },
 };

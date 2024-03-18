@@ -82,6 +82,8 @@ const Form = () => {
     }
   };
   const handleSuccess = async (credentialResponse) => {
+    
+    toggleLoading(true);
    const reponse= await apiService.signInByGoogle(credentialResponse.credential);
    const savedUser = await reponse.json();
 

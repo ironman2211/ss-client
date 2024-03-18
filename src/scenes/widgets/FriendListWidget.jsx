@@ -1,7 +1,13 @@
 import PeopleIcon from "@mui/icons-material/People";
-import { Box, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { apiService } from "apiHandled/common-services";
-import {FlexCenter,FlexBetween} from "components/Flex";
+import { FlexCenter, FlexBetween } from "components/Flex";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect } from "react";
@@ -38,7 +44,7 @@ const FriendListWidget = ({ userId }) => {
             alignItems: "center",
             gap: "1rem",
             justifyContent: "center",
-            fontSize:isNonMobileScreens?"1.3rem":".9rem"
+            fontSize: isNonMobileScreens ? "1.3rem" : ".9rem",
           }}
         >
           <PeopleIcon />
@@ -47,23 +53,22 @@ const FriendListWidget = ({ userId }) => {
       </FlexBetween>
       <Divider />
       <Box display="flex" flexDirection="column" gap="1.5rem" padding="1rem 0">
-        {friends.map((friend, index) => (
-          <Friend
-          
-            key={index}
-            friendId={friend._id}
-            name={`${friend.firstName} ${friend.lastName}`}
-            subtitle={friend.occupation}
-            userPicturePath={friend.picturePath}
-          />
-        ))}
+        {friends &&
+          friends?.map((friend, index) => (
+            <Friend
+              key={index}
+              friendId={friend._id}
+              name={`${friend.firstName} ${friend.lastName}`}
+              subtitle={friend.occupation}
+              userPicturePath={friend.picturePath}
+            />
+          ))}
         <FlexCenter>
           <Typography>
             {friends.length === 0 ? "You Don't Have Any Friends" : ""}
           </Typography>
         </FlexCenter>
       </Box>
-      
     </WidgetWrapper>
   );
 };
