@@ -95,7 +95,7 @@ const PostWidget = ({
     const response = await apiService.addComment(postId, token, addComment);
     // const updatedPost = await response.json();
     // dispatch(setPost({ post: updatedPost }));
-    window.location.reload();
+    // window.location.reload();
     //APi to add comment
   };
 
