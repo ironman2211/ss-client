@@ -5,6 +5,7 @@ import Navbar from "scenes/navbar";
 import { over } from "stompjs";
 import SockJs from "sockjs-client";
 import { legacy_createStore } from "@reduxjs/toolkit";
+import DataContainer from "./DataContainer";
 
 var stompClient = null;
 const MessagesPage = () => {
@@ -114,86 +115,87 @@ const MessagesPage = () => {
     console.log("Error");
   };
   return (
-    <Box>
-      <Navbar />
-      <h1 className="text-3xl text-teal-600 ">Hello world!</h1>
-      <div
-        style={{
-          height: "90vh",
-        }}
-      >
-        {userData.connect ? (
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-            }}
-          >
-            {/* Messages */}
-            <h3>Chat Message</h3>
-            <ul>
-              <li onClick={() => settab("ChatRoom")}>Chat Room</li>
-              {[...privateChat.keys()]
-                .filter((name) => name != userData.userName)
-                .map((name, index) => (
-                  <li onClick={() => settab(name)} key={index}>
-                    {name}
-                  </li>
-                ))}
-            </ul>
+    <DataContainer></DataContainer>
+    // <Box>
+    //   <Navbar />
+    //   <h1 className="text-3xl text-teal-600 ">Hello world!</h1>
+    //   <div
+    //     style={{
+    //       height: "90vh",
+    //     }}
+    //   >
+    //     {userData.connect ? (
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           gap: "1rem",
+    //         }}
+    //       >
+    //         {/* Messages */}
+    //         <h3>Chat Message</h3>
+    //         <ul>
+    //           <li onClick={() => settab("ChatRoom")}>Chat Room</li>
+    //           {[...privateChat.keys()]
+    //             .filter((name) => name != userData.userName)
+    //             .map((name, index) => (
+    //               <li onClick={() => settab(name)} key={index}>
+    //                 {name}
+    //               </li>
+    //             ))}
+    //         </ul>
 
-            {/* Chat Box */}
-            {tab === "ChatRoom" && (
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <h3>{tab} Box</h3>
-                <div>
-                  {publicChat &&
-                    publicChat.map((chat, index) => (
-                      <li key={index}>{chat.message}</li>
-                    ))}
-                </div>
-                <>
-                  <input
-                    value={userData.message}
-                    onChange={handleSendChage}
-                  ></input>
-                  <Button onClick={sendPublicMessage}>Send MEssage</Button>
-                </>
-              </div>
-            )}
-            {tab !== "ChatRoom" && (
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <h3>{tab} Box</h3>
-                <div>
-                  {privateChat &&
-                    [...privateChat.get(tab)].map((chat, index) => (
-                      <li key={index}>{chat.message}</li>
-                    ))}
-                </div>
-                <>
-                  <input
-                    value={userData.message}
-                    onChange={handleSendChage}
-                  ></input>
-                  <Button onClick={sendPrivateMessage}>Send MEssage</Button>
-                </>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>
-            <TextField
-              label="UserName"
-              value={userData.userName}
-              name="location"
-              onChange={handleChange}
-              sx={{ gridColumn: "span 4" }}
-            />
-            <Button onClick={handleSubmit}>Connect</Button>
-          </div>
-        )}
-      </div>
-    </Box>
+    //         {/* Chat Box */}
+    //         {tab === "ChatRoom" && (
+    //           <div style={{ display: "flex", flexDirection: "column" }}>
+    //             <h3>{tab} Box</h3>
+    //             <div>
+    //               {publicChat &&
+    //                 publicChat.map((chat, index) => (
+    //                   <li key={index}>{chat.message}</li>
+    //                 ))}
+    //             </div>
+    //             <>
+    //               <input
+    //                 value={userData.message}
+    //                 onChange={handleSendChage}
+    //               ></input>
+    //               <Button onClick={sendPublicMessage}>Send MEssage</Button>
+    //             </>
+    //           </div>
+    //         )}
+    //         {tab !== "ChatRoom" && (
+    //           <div style={{ display: "flex", flexDirection: "column" }}>
+    //             <h3>{tab} Box</h3>
+    //             <div>
+    //               {privateChat &&
+    //                 [...privateChat.get(tab)].map((chat, index) => (
+    //                   <li key={index}>{chat.message}</li>
+    //                 ))}
+    //             </div>
+    //             <>
+    //               <input
+    //                 value={userData.message}
+    //                 onChange={handleSendChage}
+    //               ></input>
+    //               <Button onClick={sendPrivateMessage}>Send MEssage</Button>
+    //             </>
+    //           </div>
+    //         )}
+    //       </div>
+    //     ) : (
+    //       <div>
+    //         <TextField
+    //           label="UserName"
+    //           value={userData.userName}
+    //           name="location"
+    //           onChange={handleChange}
+    //           sx={{ gridColumn: "span 4" }}
+    //         />
+    //         <Button onClick={handleSubmit}>Connect</Button>
+    //       </div>
+    //     )}
+    //   </div>
+    // </Box>
   );
 };
 

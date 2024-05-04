@@ -79,7 +79,7 @@ const Navbar = () => {
           />
           <ChatIcon
             sx={{ fontSize: "25px" }}
-            onClick={() => navigate("/people")}
+            onClick={() => navigate("/message")}
             cursor="pointer"
             style={
               window.location.pathname === "/message"
@@ -155,7 +155,7 @@ const Navbar = () => {
             />
              <ChatIcon
               sx={{ fontSize: "25px" }}
-              onClick={() => navigate("/people")}
+              onClick={() => navigate("/message")}
               cursor="pointer"
               style={
                 window.location.pathname === "/message"
