@@ -23,6 +23,7 @@ import {
   Close,
   LinkedIn,
 } from "@mui/icons-material";
+import ChatIcon from '@mui/icons-material/Chat';
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
@@ -72,6 +73,16 @@ const Navbar = () => {
             cursor="pointer"
             style={
               window.location.pathname === "/people"
+                ? { color: "#324ea8" }
+                : { color: theme.palette.mode }
+            }
+          />
+          <ChatIcon
+            sx={{ fontSize: "25px" }}
+            onClick={() => navigate("/people")}
+            cursor="pointer"
+            style={
+              window.location.pathname === "/message"
                 ? { color: "#324ea8" }
                 : { color: theme.palette.mode }
             }
@@ -138,6 +149,16 @@ const Navbar = () => {
               cursor="pointer"
               style={
                 window.location.pathname === "/people"
+                  ? { color: "#324ea8" }
+                  : { color: theme.palette.mode }
+              }
+            />
+             <ChatIcon
+              sx={{ fontSize: "25px" }}
+              onClick={() => navigate("/people")}
+              cursor="pointer"
+              style={
+                window.location.pathname === "/message"
                   ? { color: "#324ea8" }
                   : { color: theme.palette.mode }
               }
