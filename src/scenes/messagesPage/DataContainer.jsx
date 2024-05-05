@@ -32,8 +32,8 @@ const DataContainer = () => {
             <ChatCard />
           </div>
         </div>
-        <section className="flex-1  bg-white box-border flex flex-col items-end justify-start  px-[1.25rem] pb-[2.437rem] gap-[4.437rem] min-w-[47.813rem] max-w-full text-left text-[0.75rem] text-gray-200 font-circular-std   lg:gap-[2.188rem] mq1050:pt-[1.25rem] mq1050:pb-[1.563rem] mq1050:min-w-full mq450:pb-[1.25rem]  mq750:gap-[1.125rem]">
-          <div className="relative rounded-3xl bg-white box-border hidden max-w-full  " />
+        <section className="flex-1  bg-white box-border flex flex-col items-end justify-start pt-[1.5rem] px-[1.25rem] pb-[2.437rem] gap-[4.437rem] min-w-[47.813rem] max-w-full text-left text-[0.75rem] text-gray-200 font-circular-std   lg:gap-[2.188rem] mq1050:pt-[1.25rem] mq1050:pb-[1.563rem] mq1050:min-w-full mq450:pb-[1.25rem]  mq750:gap-[1.125rem]">
+          <div className="w-[73.563rem] h-[55.938rem] relative rounded-3xl bg-white box-border hidden max-w-full  " />
           <FrameComponent />
           <ContainerContainer />
           <div className="w-full  flex items-center justify-center p-4 gap-5">
