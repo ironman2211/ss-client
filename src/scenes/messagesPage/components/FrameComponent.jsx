@@ -17,10 +17,10 @@ const FrameComponent = ({ chatUser }) => {
         <div className="flex-1 flex flex-col items-center justify-center ml-5 text-black">
           <div className="self-stretch flex flex-col items-start justify-start gap-[0.5rem]">
             <div className="self-stretch relative leading-[1rem] font-bold">
-              {chatUser.fullName}
+              {chatUser.name}
             </div>
             <div className="w-[4.875rem] relative text-[0.75rem] leading-[0.938rem] font-circular-std text-gray-500 inline-block z-[2]">
-              Active now
+              {chatUser.status ? chatUser.status : "Active now"}
             </div>
           </div>
         </div>

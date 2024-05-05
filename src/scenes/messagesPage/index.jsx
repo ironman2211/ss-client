@@ -12,41 +12,53 @@ import ChatCard from "./widgets/ChatCard.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
+import { apiService } from "apiHandled/common-services";
 
 var stompClient = null;
 const MessagesPage = () => {
   const [publicChat, setpublicChat] = useState([]);
   const [privateChat, setprivateChat] = useState(new Map());
+  const [filteredFriend, setfilteredFriend] = useState([]);
   const { firstName, secrete } = useSelector((state) => state.user);
   const [tab, settab] = useState(null);
   const { _id, friends } = useSelector((state) => state.user);
   const [chatUser, setchatUser] = useState({});
-
-  const handleChatUser = (user) => {
-    if (user) {
-      user.fullName = user.firstName + " " + user.lastName;
-
-      setchatUser(user);
-      console.log(privateChat);
-      if (!privateChat.get(user._id)) {
-        privateChat.set(user._id, []);
-        setprivateChat(new Map(privateChat), settab(user.fullName));
-      } else {
-        settab(user.fullName);
-      }
-      // console.log(privateChat.get(chatUser._id));
-    }
-  };
-  useEffect(() => {
-    console.log(privateChat);
-  }, [chatUser, privateChat]);
-
+  const token = useSelector((state) => state.token);
   const [userData, setUserData] = useState({
     userId: "",
     reciverId: "",
     connect: false,
     message: "",
   });
+
+  
+  useEffect(() => {
+    setfilteredFriend(
+      friends.map((friend) => ({
+        _id: friend._id,
+        name: friend.firstName + " " + friend.lastName,
+        picturePath: friend.picturePath,
+        status: null,
+        bio: null,
+      }))
+    );
+  }, []);
+  // console.log(allFriends); ⚡ check
+
+  const handleChatUser = (user) => {
+    if (user) {
+      if (privateChat.get(user._id)) {
+        setchatUser(privateChat.get(user._id));
+      } else {
+        user.chats = [];
+        setchatUser(user);
+      }
+    }
+  };
+
+
+
+
   const handleChange = (e) => {
     setUserData({ ...userData, userId: e.target.value });
   };
@@ -68,14 +80,14 @@ const MessagesPage = () => {
       );
       // userJoin();
     }
-    console.log(userData);
+    // console.log(userData);
   };
   const userJoin = () => {
     let chatMessage = {
       sender: userData.userId,
       status: "JOIN",
     };
-    console.log(chatMessage);
+    // console.log(chatMessage);
     stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
   };
   const onPublicMessageReceived = (payload) => {
@@ -89,7 +101,7 @@ const MessagesPage = () => {
           privateChat.set(payLoadData.sender, []);
           setprivateChat(new Map(privateChat));
         }
-        console.log(privateChat);
+        // console.log(privateChat);
         break;
       case "MESSAGE":
         publicChat.push(payLoadData);
@@ -98,17 +110,32 @@ const MessagesPage = () => {
     }
   };
 
-  const onPrivateMessageReceived = (payload) => {
-    console.log("jii duckers");
+  const onPrivateMessageReceived = async (payload) => {
+    // console.log("jii duckers");
     const payLoadData = JSON.parse(payload.body);
-    console.log(privateChat);
+    // console.log(payLoadData);
     if (privateChat.get(payLoadData.sender)) {
-      privateChat.get(payLoadData.sender).push(payLoadData);
-      setprivateChat(new Map(privateChat), () => console.log(privateChat));
+      setprivateChat((prevPrivateChat) => {
+        const updatedPrivateChat = new Map(prevPrivateChat);
+        const x = updatedPrivateChat.get(payLoadData.sender);
+        if (x) {
+          x.chats.push(payLoadData);
+        }
+        return updatedPrivateChat;
+      });
     } else {
-      let list = [];
-      list.push(payLoadData);
-      privateChat.set(payLoadData.sender, list);
+      const response = await apiService.getUser(payLoadData.sender, token);
+      const user = await response.json();
+      let chatInfo = {
+        _id: payLoadData.sender,
+        name: user.firstName + " " + user.lastName,
+        picturePath: user.picturePath,
+        status: null,
+        bio: null,
+        chats: [],
+      };
+      chatInfo.chats.push(payLoadData);
+      privateChat.set(user._id, chatInfo);
       setprivateChat(new Map(privateChat));
     }
   };
@@ -125,17 +152,28 @@ const MessagesPage = () => {
         receiver: chatUser._id,
         status: "MESSAGE",
       };
-      console.log(chatMessage);
+
+      if (!privateChat.get(chatUser._id)) {
+        privateChat.set(chatUser._id, chatUser);
+        setprivateChat(new Map(privateChat));
+        setfilteredFriend(
+          filteredFriend.filter((friend) => friend._id != chatUser._id)
+        );
+      }
+
       if (userData.userId !== chatUser._id) {
-        privateChat.get(chatUser._id).push(chatMessage);
-        setprivateChat(new Map(privateChat), () => {
-          console.log(privateChat);
+        setprivateChat((prevPrivateChat) => {
+          const updatedPrivateChat = new Map(prevPrivateChat);
+          const x = updatedPrivateChat.get(chatUser._id);
+          if (x) {
+            x.chats.push(chatMessage);
+          }
+          return updatedPrivateChat;
         });
       }
       stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
       userData.message = "";
       setUserData(userData);
-      console.log(userData);
     }
   };
   const sendPublicMessage = () => {
@@ -151,7 +189,7 @@ const MessagesPage = () => {
   };
 
   const onError = () => {
-    console.log("Error");
+    // console.log("Error");
   };
   useEffect(() => {
     if (!userData.connect) handleSubmit();
@@ -183,14 +221,20 @@ const MessagesPage = () => {
             {[...privateChat.keys()]
               .filter((key) => key != userData.userId)
               .map((_id, index) => (
-                <ChatCard didChat={true}  user={privateChat.get(_id)} handleclick={handleChatUser} />
+                <ChatCard
+                  key={index}
+                  didChat={true}
+                  user={privateChat.get(_id)}
+                  handleclick={handleChatUser}
+                />
               ))}
 
             <div className="flex  w-full h-12 ">
               <b className="text-2xl font-semibold">Friends</b>
             </div>
-            {friends.map((friend) => (
+            {filteredFriend.map((friend, index) => (
               <ChatCard
+                key={index}
                 user={friend}
                 didChat={false}
                 handleclick={handleChatUser}
@@ -198,15 +242,12 @@ const MessagesPage = () => {
             ))}
           </div>
         </div>
-        {tab && (
+        {chatUser?._id && (
           // <form>
           <section className="flex-1  bg-white box-border flex flex-col items-end justify-start  px-[1.25rem] pb-[2.437rem] gap-[4.437rem] min-w-[47.813rem] max-w-full text-left text-[0.75rem] text-gray-200 font-circular-std   lg:gap-[2.188rem] mq1050:pt-[1.25rem] mq1050:pb-[1.563rem] mq1050:min-w-full mq450:pb-[1.25rem]  mq750:gap-[1.125rem]">
             <div className="relative rounded-3xl bg-white box-border hidden max-w-full  " />
             <FrameComponent chatUser={chatUser} />
-            <ContainerContainer
-              privateChat={privateChat.get(chatUser._id)}
-              chatuser={chatUser}
-            />
+            <ContainerContainer privateChat={chatUser} />
             <div className="w-full  flex items-center justify-center p-4 gap-5">
               <button className="bg-transparent outline-none w-12 text-black">
                 <AttachFileIcon />

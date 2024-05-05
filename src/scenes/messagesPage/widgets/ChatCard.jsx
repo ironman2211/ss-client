@@ -1,7 +1,7 @@
 import React from "react";
 
 const ChatCard = ({ user, didChat, handleclick }) => {
-  console.log("Fucker");
+  //   console.log("Fucker");
   console.log(user);
   return (
     <div
@@ -20,22 +20,25 @@ const ChatCard = ({ user, didChat, handleclick }) => {
       </button>
       <div className=" flex flex-col items-start justify-start gap-2 w-40 ">
         <h2 className=" text-base font-bold  w-[15rem]">
-          {user ? user?.firstName + " " + user.lastName : "N / A"}
+          {user ? user?.name : "N / A"}
         </h2>
         <div className=" text-[0.75rem] leading-[0.75rem] text-gray-800 inline-block ">
-          How are you today?
+          {/* {user.bio ? user.bio : "No Bio Available"} */}
+          {didChat
+            ? user.chats[user.chats.length - 1].message
+            : "No Bio Available"}
         </div>
       </div>
-      {didChat ? (
+      {/* {didChat ? (
         <div className="flex flex-col items-end justify-start gap-2">
           <div className="text-xs mt-2">2 min ago</div>
           <div className="w-[1.375rem] h-[1.375rem] relative text-white bg-red-500 rounded-full flex items-center justify-center">
-            3
+            0
           </div>
-        </div>
-      ) : (
+        </div> */}
+      {/* ) : ( */}
         <div className="flex flex-col items-end justify-start gap-2 w-14"></div>
-      )}
+      {/* )} */}
     </div>
   );
 };
