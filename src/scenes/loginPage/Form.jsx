@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import { FlexBetween } from "../../components/Flex";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import Loading from "components/Loading";
 import AlertModal from "components/common-comps/AlertModal";
 import { GoogleLogin } from "@react-oauth/google";

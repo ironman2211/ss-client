@@ -1,5 +1,5 @@
 import { Box, Divider, Typography, useMediaQuery } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import React from "react";
 import { timeAgo } from "utils/helper";
 import DeleteIcon from "@mui/icons-material/Delete";

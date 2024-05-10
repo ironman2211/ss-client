@@ -1,5 +1,5 @@
 import { Typography, useTheme } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 

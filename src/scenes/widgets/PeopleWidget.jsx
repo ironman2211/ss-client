@@ -7,7 +7,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 
 const PeopleWidget = ({ user }) => {
   const { firstName, lastName, picturePath } = user;

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import { Box, Typography } from "@mui/material";
 import WidgetWrapper from "components/WidgetWrapper";
 

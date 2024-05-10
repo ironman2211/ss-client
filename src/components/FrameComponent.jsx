@@ -2,6 +2,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import CallIcon from "@mui/icons-material/Call";
 const FrameComponent = ({ chatUser }) => {
+  console.log(chatUser);
   return (
     <div className="flex w-full bg-gray-100 p-3  rounded-xl text-black justify-between">
       <div className="flex flex-row">

@@ -19,7 +19,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const MyPostWidget = () => {

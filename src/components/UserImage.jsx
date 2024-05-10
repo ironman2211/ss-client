@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import ImgAndPlaceHolder from "./ImgAndPlaceHolder";
 
 const UserImage = ({ image, size = "60px" }) => {

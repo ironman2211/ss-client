@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PeopleWidget from "./PeopleWidget";
 import { Box, CircularProgress, useMediaQuery } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 
 const People = () => {
   const [users, setUsers] = useState([]);

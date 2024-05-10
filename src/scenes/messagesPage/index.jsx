@@ -1,29 +1,30 @@
 import { BottomNavigation, Box, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "scenes/navbar";
 import { over } from "stompjs";
 import SockJs from "sockjs-client";
 import { legacy_createStore } from "@reduxjs/toolkit";
-import DataContainer from "./DataContainer";
-import FrameComponent from "./components/FrameComponent.jsx";
-import ContainerContainer from "./components/ContainerContainer.jsx";
-import ChatCard from "./widgets/ChatCard.jsx";
+import FrameComponent from "../../components/FrameComponent.jsx";
+import ContainerContainer from "../../components/ContainerContainer.jsx";
+import ChatCard from "../../widgets/ChatCard.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices.js";
+import { setChats } from "state";
 
 var stompClient = null;
 const MessagesPage = () => {
   const [publicChat, setpublicChat] = useState([]);
   const [privateChat, setprivateChat] = useState(new Map());
   const [filteredFriend, setfilteredFriend] = useState([]);
-  const { firstName, secrete } = useSelector((state) => state.user);
   const [tab, settab] = useState(null);
-  const { _id, friends } = useSelector((state) => state.user);
+  const { _id, friends, chats } = useSelector((state) => state.user);
   const [chatUser, setchatUser] = useState({});
   const token = useSelector((state) => state.token);
+  const dispatch = useDispatch();
+
   const [userData, setUserData] = useState({
     userId: "",
     reciverId: "",
@@ -31,7 +32,6 @@ const MessagesPage = () => {
     message: "",
   });
 
-  
   useEffect(() => {
     setfilteredFriend(
       friends.map((friend) => ({
@@ -39,7 +39,6 @@ const MessagesPage = () => {
         name: friend.firstName + " " + friend.lastName,
         picturePath: friend.picturePath,
         status: null,
-        bio: null,
       }))
     );
   }, []);
@@ -47,22 +46,21 @@ const MessagesPage = () => {
 
   const handleChatUser = (user) => {
     if (user) {
+      console.log(user);
       if (privateChat.get(user._id)) {
         setchatUser(privateChat.get(user._id));
       } else {
-        user.chats = [];
+        user.last_message = [];
         setchatUser(user);
       }
     }
   };
 
-
-
-
   const handleChange = (e) => {
     setUserData({ ...userData, userId: e.target.value });
   };
   const handleSubmit = () => {
+    // connect _WS_Chat_server
     let Sock = new SockJs("http://localhost:8080/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnect, onError);
@@ -78,7 +76,8 @@ const MessagesPage = () => {
         "/user/" + userData.userId + "/private",
         onPrivateMessageReceived
       );
-      // userJoin();
+
+      updatePrivateChats();
     }
     // console.log(userData);
   };
@@ -111,7 +110,7 @@ const MessagesPage = () => {
   };
 
   const onPrivateMessageReceived = async (payload) => {
-    // console.log("jii duckers");
+    console.log("jii duckers");
     const payLoadData = JSON.parse(payload.body);
     // console.log(payLoadData);
     if (privateChat.get(payLoadData.sender)) {
@@ -124,12 +123,14 @@ const MessagesPage = () => {
         return updatedPrivateChat;
       });
     } else {
+      // Create a new private chat | UPDATE DB
       const response = await apiService.getUser(payLoadData.sender, token);
       const user = await response.json();
       let chatInfo = {
         _id: payLoadData.sender,
         name: user.firstName + " " + user.lastName,
         picturePath: user.picturePath,
+        chat_id: _id + "_" + payLoadData.sender,
         status: null,
         bio: null,
         chats: [],
@@ -137,6 +138,7 @@ const MessagesPage = () => {
       chatInfo.chats.push(payLoadData);
       privateChat.set(user._id, chatInfo);
       setprivateChat(new Map(privateChat));
+      console.log(privateChat);
     }
   };
 
@@ -144,21 +146,34 @@ const MessagesPage = () => {
     setUserData({ ...userData, message: e.target.value });
   };
 
-  const sendPrivateMessage = () => {
+  const sendPrivateMessage = async () => {
+    console.log(chats);
+    // if (chats == undefined || chats == [] || !chats.includes(chatUser._id)) {
+    //   const response = await apiService.addUserToChats(chatUser._id, token, _id);
+    //   const user = await response.json();
+    //   if(user){
+    //     dispatch(
+    //       setChats({
+    //         chats: user.chats,
+    //       })
+    //     );
+    //   }
+    // }
+
     if (stompClient) {
       let chatMessage = {
         sender: userData.userId,
         message: userData.message,
         receiver: chatUser._id,
-        status: "MESSAGE",
+        status: "SEND",
       };
+      console.log(chatMessage);
 
       if (!privateChat.get(chatUser._id)) {
         privateChat.set(chatUser._id, chatUser);
         setprivateChat(new Map(privateChat));
-        setfilteredFriend(
-          filteredFriend.filter((friend) => friend._id != chatUser._id)
-        );
+        console.log("privateChat");
+        console.log(privateChat);
       }
 
       if (userData.userId !== chatUser._id) {
@@ -166,15 +181,21 @@ const MessagesPage = () => {
           const updatedPrivateChat = new Map(prevPrivateChat);
           const x = updatedPrivateChat.get(chatUser._id);
           if (x) {
-            x.chats.push(chatMessage);
+            x.last_message.push(chatMessage);
           }
           return updatedPrivateChat;
         });
       }
-      stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
+      // stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
       userData.message = "";
       setUserData(userData);
     }
+  };
+
+  const updateChatScope = () => {
+    [...privateChat.keys()].forEach((id) => {
+      setfilteredFriend(filteredFriend.filter((friend) => friend._id != id));
+    });
   };
   const sendPublicMessage = () => {
     if (stompClient) {
@@ -191,6 +212,22 @@ const MessagesPage = () => {
   const onError = () => {
     // console.log("Error");
   };
+
+  const updatePrivateChats = async () => {
+    try {
+      console.log("Startd");
+      const response = await apiService.getAllPrivateChats(_id, token);
+      const PVC = await response.json();
+      setprivateChat(new Map(Object.entries(PVC)), updateChatScope());
+    } catch (error) {
+      console.log(error + "Error in Updating Private chats");
+    }
+  };
+
+  useEffect(() => {
+    updateChatScope();
+    console.log(privateChat);
+  }, [privateChat, chats]);
   useEffect(() => {
     if (!userData.connect) handleSubmit();
   }, [userData.connect, userData]);
@@ -247,7 +284,10 @@ const MessagesPage = () => {
           <section className="flex-1  bg-white box-border flex flex-col items-end justify-start  px-[1.25rem] pb-[2.437rem] gap-[4.437rem] min-w-[47.813rem] max-w-full text-left text-[0.75rem] text-gray-200 font-circular-std   lg:gap-[2.188rem] mq1050:pt-[1.25rem] mq1050:pb-[1.563rem] mq1050:min-w-full mq450:pb-[1.25rem]  mq750:gap-[1.125rem]">
             <div className="relative rounded-3xl bg-white box-border hidden max-w-full  " />
             <FrameComponent chatUser={chatUser} />
-            <ContainerContainer privateChat={chatUser} />
+            <ContainerContainer
+              chatUser={chatUser}
+              privateChat={privateChat}
+            />
             <div className="w-full  flex items-center justify-center p-4 gap-5">
               <button className="bg-transparent outline-none w-12 text-black">
                 <AttachFileIcon />
@@ -259,7 +299,7 @@ const MessagesPage = () => {
                 onChange={handleSendChage}
               />
               <button
-                className="bg-transparent outline-none  bg-green-700 h-10 w-10 rounded-full"
+                className="bg-transparent outline-none  bg-green-800 h-10 w-10 rounded-full"
                 onClick={sendPrivateMessage}
               >
                 <SendIcon />
@@ -274,84 +314,3 @@ const MessagesPage = () => {
 };
 
 export default MessagesPage;
-
-// <Box>
-//   <Navbar />
-//   <h1 className="text-3xl text-teal-600 ">Hello world!</h1>
-//   <div
-//     style={{
-//       height: "90vh",
-//     }}
-//   >
-//     {userData.connect ? (
-//       <div
-//         style={{
-//           display: "flex",
-//           gap: "1rem",
-//         }}
-//       >
-//         {/* Messages */}
-//         <h3>Chat Message</h3>
-//         <ul>
-//           <li onClick={() => settab("ChatRoom")}>Chat Room</li>
-//           {[...privateChat.keys()]
-//             .filter((name) => name != userData.userId)
-//             .map((name, index) => (
-//               <li onClick={() => settab(name)} key={index}>
-//                 {name}
-//               </li>
-//             ))}
-//         </ul>
-
-//         {/* Chat Box */}
-//         {tab === "ChatRoom" && (
-//           <div style={{ display: "flex", flexDirection: "column" }}>
-//             <h3>{tab} Box</h3>
-//             <div>
-//               {publicChat &&
-//                 publicChat.map((chat, index) => (
-//                   <li key={index}>{chat.message}</li>
-//                 ))}
-//             </div>
-//             <>
-//               <input
-//                 value={userData.message}
-//                 onChange={handleSendChage}
-//               ></input>
-//               <Button onClick={sendPublicMessage}>Send MEssage</Button>
-//             </>
-//           </div>
-//         )}
-//         {tab !== "ChatRoom" && (
-//           <div style={{ display: "flex", flexDirection: "column" }}>
-//             <h3>{tab} Box</h3>
-//             <div>
-//               {privateChat &&
-//                 [...privateChat.get(tab)].map((chat, index) => (
-//                   <li key={index}>{chat.message}</li>
-//                 ))}
-//             </div>
-//             <>
-//               <input
-//                 value={userData.message}
-//                 onChange={handleSendChage}
-//               ></input>
-//               <Button onClick={sendPrivateMessage}>Send MEssage</Button>
-//             </>
-//           </div>
-//         )}
-//       </div>
-//     ) : (
-//       <div>
-//         <TextField
-//           label="userId"
-//           value={userData.userId}
-//           name="location"
-//           onChange={handleChange}
-//           sx={{ gridColumn: "span 4" }}
-//         />
-//         <Button onClick={handleSubmit}>Connect</Button>
-//       </div>
-//     )}
-//   </div>
-// </Box>

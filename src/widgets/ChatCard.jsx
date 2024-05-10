@@ -2,7 +2,7 @@ import React from "react";
 
 const ChatCard = ({ user, didChat, handleclick }) => {
   //   console.log("Fucker");
-  console.log(user);
+  if (didChat) console.log(user);
   return (
     <div
       className="flex flex-row items-center justify-between w-full h-20 p-3 cursor-pointer"
@@ -25,7 +25,7 @@ const ChatCard = ({ user, didChat, handleclick }) => {
         <div className=" text-[0.75rem] leading-[0.75rem] text-gray-800 inline-block ">
           {/* {user.bio ? user.bio : "No Bio Available"} */}
           {didChat
-            ? user.chats[user.chats.length - 1].message
+            ? user.last_message[user.last_message.length - 1].message
             : "No Bio Available"}
         </div>
       </div>
@@ -37,7 +37,7 @@ const ChatCard = ({ user, didChat, handleclick }) => {
           </div>
         </div> */}
       {/* ) : ( */}
-        <div className="flex flex-col items-end justify-start gap-2 w-14"></div>
+      <div className="flex flex-col items-end justify-start gap-2 w-14"></div>
       {/* )} */}
     </div>
   );

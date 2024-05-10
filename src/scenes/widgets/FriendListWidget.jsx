@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import { FlexCenter, FlexBetween } from "components/Flex";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
