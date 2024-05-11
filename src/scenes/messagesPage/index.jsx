@@ -13,6 +13,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
 import { apiService } from "services/CommonServices.js";
 import { setChats } from "state";
+import { FlexBetween } from "components/Flex.jsx";
 
 var stompClient = null;
 const MessagesPage = () => {
@@ -213,26 +214,24 @@ const MessagesPage = () => {
   return (
     <div
       className="w-screen h-screen bg-white"
-      style={{
-        fontFamily: "poppins",
-      }}
+      style={{ fontFamily: "poppins" }}
     >
       <Navbar />
       <hr />
-      <main className="flex flex-row flex-wrap items-start justify-start md:px-20 md:py-5 md:p-2  ">
-        <div className=" flex flex-col items-start justify-start max-w-full p-8  border-r-2 border-gray-200   ">
-          <div className=" w-[20.438rem] h-[70vh] self-stretch flex flex-col items-end justify-start gap-2 max-w-full ">
-            <div className="flex  w-full h-12 mb-">
+      <FlexBetween className="px-10 pt-5 ">
+        <div className="flex flex-col items-start justify-start w-[25vw] h-[85vh]  border-r-2 border-gray-200 ">
+          <div className="w-[22vw]   h-full  flex flex-col justify-start p-5  ">
+            <div className="flex  w-full h-12 overflow-y-scroll ">
               {/* <input
                 className="w-full p-5 outline-none border-2 rounded-2xl"
                 placeholder="Search.."
               /> */}
               <div className=" flex w-full px-2 item-center justify-between">
-                <b className="text-2xl font-bold">Chats</b>
-                <SearchIcon className="text-xl cursor-pointer mt-4" />
+                <b className="text-xl font-bold ">Chats</b>
+                <SearchIcon className="text-xl cursor-pointer mt-1" />
               </div>
             </div>
-
+            {/* <hr className="w-full h-2" /> */}
             {[...privateChat.keys()]
               .filter((key) => key != userData.userId)
               .map((_id, index) => (
@@ -244,9 +243,11 @@ const MessagesPage = () => {
                 />
               ))}
 
-            <div className="flex  w-full h-12 ">
-              <b className="text-2xl font-semibold">Friends</b>
+            <div className="flex  w-full h-12 mt-5  ">
+              <b className="text-xl font-semibold">Friends</b>
             </div>
+            <hr className="w-full h-2" />
+
             {filteredFriend.map((friend, index) => (
               <ChatCard
                 key={index}
@@ -259,15 +260,14 @@ const MessagesPage = () => {
         </div>
         {chatUser?._id && (
           // <form>
-          <section className="flex-1  bg-white box-border flex flex-col items-end justify-start  px-[1.25rem] pb-[2.437rem] gap-[4.437rem] min-w-[47.813rem] max-w-full text-left text-[0.75rem] text-gray-200 font-circular-std   lg:gap-[2.188rem] mq1050:pt-[1.25rem] mq1050:pb-[1.563rem] mq1050:min-w-full mq450:pb-[1.25rem]  mq750:gap-[1.125rem]">
-            <div className="relative rounded-3xl bg-white box-border hidden max-w-full  " />
+          <section className="flex-1 w-[75vw]  px-5 h-[85vh] justify-between ">
             <FrameComponent chatUser={chatUser} />
             <ContainerContainer
               chatUser={chatUser}
               privateChat={privateChat}
               setprivateChat={setprivateChat}
             />
-            <div className="w-full  flex items-center justify-center p-4 gap-5">
+            <div className="w-full  flex items-center justify-center p-2 gap-5  ">
               <button className="bg-transparent outline-none w-12 text-black">
                 <AttachFileIcon />
               </button>
@@ -278,7 +278,7 @@ const MessagesPage = () => {
                 onChange={handleSendChage}
               />
               <button
-                className="bg-transparent outline-none  bg-green-800 h-10 w-10 rounded-full"
+                className="bg-transparent outline-none  bg-green-300 twxt-white h-10 w-10 rounded-full"
                 onClick={sendPrivateMessage}
               >
                 <SendIcon />
@@ -287,7 +287,7 @@ const MessagesPage = () => {
           </section>
           // </form>
         )}
-      </main>
+      </FlexBetween>
     </div>
   );
 };

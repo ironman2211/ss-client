@@ -45,9 +45,12 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
       day: "numeric",
     });
   };
-
+  window.onload = function() {
+    const scrollableDiv = document.getElementById('scrollableDiv');
+    scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+  };
   return (
-    <div className="w-full h-[50vh] overflow-scroll">
+    <div className="w-full h-[65vh] overflow-y-auto" id="scrollableDiv">
       <div className="flex-1 flex flex-col items-start justify-start gap-[0.5rem] max-w-full text-black">
       {loadChat &&
           privateChat.get(chatUser._id) &&
