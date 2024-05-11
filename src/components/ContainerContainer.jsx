@@ -4,37 +4,46 @@ import MyText from "../widgets/MyText";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-const ContainerContainer = ({chatUser, privateChat }) => {
-  // console.log(privateChat);
-  // http://localhost:8080/api/chats/getAll
+const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
   const { _id } = useSelector((state) => state.user);
-  const [chats, setchats] = useState([]);
+  const [loadChat, setloadChat] = useState(false);
+
+  const getAllChats = async () => {
+    let response = await chatService.getAllPrivateChats(chatUser._id, _id);
+    return await response.json();
+  };
 
   const getAllPrivateChats = async () => {
-    let response = await chatService.getAllPrivateChats(chatUser._id, _id);
-    const chats = await response.json();
-    setchats(chats);
-    console.log(chats);
+    console.log(chatUser);
+    if (privateChat.get(chatUser._id)) {
+      console.log("hann chi");
+      const user = privateChat.get(chatUser._id);
+      user.last_message = await getAllChats();
+      setprivateChat(privateChat.set(chatUser._id, user), setloadChat(true));
+    }
   };
-  useEffect(()=>{
-    
-  getAllPrivateChats();
-  },[privateChat])
+
+  useEffect(() => {
+    getAllPrivateChats();
+  }, []);
+
   return (
     <div className="w-full h-[50vh] overflow-scroll">
       <div className="flex-1 flex flex-col items-start justify-start gap-[0.5rem] max-w-full text-black">
-        {chats&&chats.map((chat, index) => {
-          if (chat.sender === chatUser._id)
-            return (
-              <FriendText
-                key={index}
-                name={chatUser.name}
-                picture={chatUser.picturePath}
-                text={chat.message}
-              />
-            );
-          return <MyText key={index} text={chat.message} />;
-        })}
+        {loadChat &&
+          privateChat.get(chatUser._id) &&
+          privateChat.get(chatUser._id).last_message.map((chat, index) => {
+            if (chat.sender === chatUser._id)
+              return (
+                <FriendText
+                  key={index}
+                  name={chatUser.name}
+                  picture={chatUser.picturePath}
+                  text={chat.message}
+                />
+              );
+            return <MyText key={index} text={chat.message} />;
+          })}
       </div>
     </div>
   );

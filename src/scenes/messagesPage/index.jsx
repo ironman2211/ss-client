@@ -109,37 +109,27 @@ const MessagesPage = () => {
     }
   };
 
+  const [receivedMessage, setreceivedMessage] = useState({});
   const onPrivateMessageReceived = async (payload) => {
-    console.log("jii duckers");
-    const payLoadData = JSON.parse(payload.body);
+    setreceivedMessage(JSON.parse(payload.body));
+  };
+
+  useEffect(() => {
+    addtoPrivateChat();
+  }, [receivedMessage]);
+
+  const addtoPrivateChat = async () => {
     // console.log(payLoadData);
-    if (privateChat.get(payLoadData.sender)) {
+    if (privateChat.get(receivedMessage.sender)) {
       setprivateChat((prevPrivateChat) => {
         const updatedPrivateChat = new Map(prevPrivateChat);
-        const x = updatedPrivateChat.get(payLoadData.sender);
+        const x = updatedPrivateChat.get(receivedMessage.sender);
         if (x) {
-          x.chats.push(payLoadData);
+          x.last_message.push(receivedMessage);
         }
         return updatedPrivateChat;
       });
-    } else {
-      // Create a new private chat | UPDATE DB
-      const response = await apiService.getUser(payLoadData.sender, token);
-      const user = await response.json();
-      let chatInfo = {
-        _id: payLoadData.sender,
-        name: user.firstName + " " + user.lastName,
-        picturePath: user.picturePath,
-        chat_id: _id + "_" + payLoadData.sender,
-        status: null,
-        bio: null,
-        chats: [],
-      };
-      chatInfo.chats.push(payLoadData);
-      privateChat.set(user._id, chatInfo);
-      setprivateChat(new Map(privateChat));
-      console.log(privateChat);
-    }
+    } else updatePrivateChats();
   };
 
   const handleSendChage = (e) => {
@@ -147,19 +137,6 @@ const MessagesPage = () => {
   };
 
   const sendPrivateMessage = async () => {
-    console.log(chats);
-    // if (chats == undefined || chats == [] || !chats.includes(chatUser._id)) {
-    //   const response = await apiService.addUserToChats(chatUser._id, token, _id);
-    //   const user = await response.json();
-    //   if(user){
-    //     dispatch(
-    //       setChats({
-    //         chats: user.chats,
-    //       })
-    //     );
-    //   }
-    // }
-
     if (stompClient) {
       let chatMessage = {
         sender: userData.userId,
@@ -167,15 +144,13 @@ const MessagesPage = () => {
         receiver: chatUser._id,
         status: "SEND",
       };
-      console.log(chatMessage);
 
+      // ADD to private_message
       if (!privateChat.get(chatUser._id)) {
         privateChat.set(chatUser._id, chatUser);
         setprivateChat(new Map(privateChat));
-        console.log("privateChat");
-        console.log(privateChat);
       }
-
+      // UPDATE private message array
       if (userData.userId !== chatUser._id) {
         setprivateChat((prevPrivateChat) => {
           const updatedPrivateChat = new Map(prevPrivateChat);
@@ -186,9 +161,11 @@ const MessagesPage = () => {
           return updatedPrivateChat;
         });
       }
-      // stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
+      // SEND message
+      stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
       userData.message = "";
       setUserData(userData);
+      updateChatScope();
     }
   };
 
@@ -287,6 +264,7 @@ const MessagesPage = () => {
             <ContainerContainer
               chatUser={chatUser}
               privateChat={privateChat}
+              setprivateChat={setprivateChat}
             />
             <div className="w-full  flex items-center justify-center p-4 gap-5">
               <button className="bg-transparent outline-none w-12 text-black">
