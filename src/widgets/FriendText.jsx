@@ -1,6 +1,6 @@
 import React from "react";
 
-const FriendText = ({ name, picture, text }) => {
+const FriendText = ({ name, picture, text,time }) => {
   return (
     <div className="self-stretch flex flex-col items-start justify-start pt-[0rem] px-[0rem] pb-[2.437rem] gap-[0.562rem]">
       
@@ -12,7 +12,7 @@ const FriendText = ({ name, picture, text }) => {
       </div>
       <span className="bg-gray-100 w-fit p-3 rounded-b-xl ml-10">{text}</span>
       <span className=" w-fit  font-semibold  text-black-900  rounded-b-xl ml-11">
-        10:79 AM
+        {time}
       </span>
     </div>
   );

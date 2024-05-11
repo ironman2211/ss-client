@@ -143,6 +143,7 @@ const MessagesPage = () => {
         message: userData.message,
         receiver: chatUser._id,
         status: "SEND",
+        date: new Date(),
       };
 
       // ADD to private_message
@@ -195,7 +196,7 @@ const MessagesPage = () => {
       console.log("Startd");
       const response = await apiService.getAllPrivateChats(_id, token);
       const PVC = await response.json();
-      setprivateChat(new Map(Object.entries(PVC)), updateChatScope());
+      setprivateChat(new Map(Object.entries(PVC)));
     } catch (error) {
       console.log(error + "Error in Updating Private chats");
     }

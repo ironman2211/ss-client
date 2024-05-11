@@ -1,6 +1,6 @@
 import React from "react";
 
-const MyText = ({ text }) => {
+const MyText = ({ text ,time}) => {
   return (
     <div className="self-stretch flex flex-row items-start justify-end text-right">
       <div className="flex flex-col items-end justify-end">
@@ -8,7 +8,7 @@ const MyText = ({ text }) => {
           {text}
         </span>
         <span className=" w-fit font-semibold  text-green-900  rounded-b-xl mt-2">
-          10:79 AM
+          {time}
         </span>
       </div>
     </div>
