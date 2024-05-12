@@ -72,7 +72,7 @@ const MessagesPage = () => {
   };
   const handleSubmit = () => {
     // connect _WS_Chat_server
-    let Sock = new SockJs("http://localhost:8080/ws");
+    let Sock = new SockJs("https://chat-server-1-0-0-release.onrender.com/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnect, onError);
   };
