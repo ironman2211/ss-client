@@ -1,4 +1,10 @@
-import { BottomNavigation, Box, Button, TextField } from "@mui/material";
+import {
+  BottomNavigation,
+  Box,
+  Button,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "scenes/navbar";
@@ -25,6 +31,10 @@ const MessagesPage = () => {
   const [chatUser, setchatUser] = useState({});
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
+
+  const isMobileScreens = useMediaQuery("(max-width: 640px)");
+
+  const [clickedChatuser, setclickedChatuser] = useState(false);
 
   const [userData, setUserData] = useState({
     userId: "",
@@ -53,6 +63,9 @@ const MessagesPage = () => {
       } else {
         user.last_message = [];
         setchatUser(user);
+      }
+      if (isMobileScreens) {
+        setclickedChatuser(!clickedChatuser);
       }
     }
   };
@@ -202,6 +215,11 @@ const MessagesPage = () => {
       console.log(error + "Error in Updating Private chats");
     }
   };
+  const handleBack = () => {
+    if (isMobileScreens) {
+      setclickedChatuser(!clickedChatuser);
+    }
+  };
 
   useEffect(() => {
     updateChatScope();
@@ -217,76 +235,81 @@ const MessagesPage = () => {
       style={{ fontFamily: "poppins" }}
     >
       <Navbar />
-      <hr />
-      <FlexBetween className="px-10 pt-5 ">
-        <div className="flex flex-col items-start justify-start w-[25vw] h-[85vh]  border-r-2 border-gray-200 ">
-          <div className="w-[22vw]   h-full  flex flex-col justify-start p-5  ">
-            <div className="flex  w-full h-12 overflow-y-scroll ">
-              {/* <input
+      {/* <hr /> */}
+      <FlexBetween className="xl:px-14">
+        {isMobileScreens && clickedChatuser ? (
+          <></>
+        ) : (
+          <div className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw] sm:w-[40vw] w-[100vw] h-[85vh]   border-r-2 border-gray-200 md:p-5 px-8 py-5 ">
+            <div className="h-full w-full flex flex-col justify-start ">
+              <div className="flex  w-full h-12 overflow-y-scroll ">
+                {/* <input
                 className="w-full p-5 outline-none border-2 rounded-2xl"
                 placeholder="Search.."
               /> */}
-              <div className=" flex w-full px-2 item-center justify-between">
-                <b className="text-xl font-bold ">Chats</b>
-                <SearchIcon className="text-xl cursor-pointer mt-1" />
+                <div className=" flex w-full px-2 item-center justify-between">
+                  <b className="text-xl font-bold ">Chats</b>
+                  <SearchIcon className="text-xl cursor-pointer mt-1" />
+                </div>
               </div>
-            </div>
-            {/* <hr className="w-full h-2" /> */}
-            {[...privateChat.keys()]
-              .filter((key) => key != userData.userId)
-              .map((_id, index) => (
+              {/* <hr className="w-full h-2" /> */}
+              {[...privateChat.keys()]
+                .filter((key) => key != userData.userId)
+                .map((_id, index) => (
+                  <ChatCard
+                    key={index}
+                    didChat={true}
+                    user={privateChat.get(_id)}
+                    handleclick={handleChatUser}
+                  />
+                ))}
+
+              <div className="flex  w-full h-12 mt-5  ">
+                <b className="text-xl font-semibold">Friends</b>
+              </div>
+              <hr className="w-full h-2" />
+
+              {filteredFriend.map((friend, index) => (
                 <ChatCard
                   key={index}
-                  didChat={true}
-                  user={privateChat.get(_id)}
+                  user={friend}
+                  didChat={false}
                   handleclick={handleChatUser}
                 />
               ))}
-
-            <div className="flex  w-full h-12 mt-5  ">
-              <b className="text-xl font-semibold">Friends</b>
             </div>
-            <hr className="w-full h-2" />
-
-            {filteredFriend.map((friend, index) => (
-              <ChatCard
-                key={index}
-                user={friend}
-                didChat={false}
-                handleclick={handleChatUser}
-              />
-            ))}
           </div>
-        </div>
-        {chatUser?._id && (
-          // <form>
-          <section className="flex-1 w-[75vw]  px-5 h-[85vh] justify-between ">
-            <FrameComponent chatUser={chatUser} />
-            <ContainerContainer
-              chatUser={chatUser}
-              privateChat={privateChat}
-              setprivateChat={setprivateChat}
-            />
-            <div className="w-full  flex items-center justify-center p-2 gap-5  ">
-              <button className="bg-transparent outline-none w-12 text-black">
-                <AttachFileIcon />
-              </button>
-              <input
-                className="w-10/12 px-4 py-3 outline-none text-black rounded-xl bg-gray-100 "
-                value={userData.message}
-                placeholder="Enter your message"
-                onChange={handleSendChage}
-              />
-              <button
-                className="bg-transparent outline-none  bg-green-300 twxt-white h-10 w-10 rounded-full"
-                onClick={sendPrivateMessage}
-              >
-                <SendIcon />
-              </button>
-            </div>
-          </section>
-          // </form>
         )}
+        {(isMobileScreens && !clickedChatuser) ||
+          (chatUser?._id && (
+            // <form>
+            <section className="flex-1 xl:w-[40vw] w-[10vw] px-5 h-[85vh] justify-between   ">
+              <FrameComponent chatUser={chatUser} handleBack={handleBack} />
+              <ContainerContainer
+                chatUser={chatUser}
+                privateChat={privateChat}
+                setprivateChat={setprivateChat}
+              />
+              <div className="w-full  flex items-center justify-center p-2 gap-5  ">
+                <button className="bg-transparent outline-none w-12 text-black">
+                  <AttachFileIcon />
+                </button>
+                <input
+                  className="w-10/12 px-4 py-3 outline-none text-black rounded-xl bg-gray-100 "
+                  value={userData.message}
+                  placeholder="Enter your message"
+                  onChange={handleSendChage}
+                />
+                <button
+                  className="bg-transparent outline-none  bg-green-300 twxt-white h-10 w-10 rounded-full"
+                  onClick={sendPrivateMessage}
+                >
+                  <SendIcon />
+                </button>
+              </div>
+            </section>
+            // </form>
+          ))}
       </FlexBetween>
     </div>
   );

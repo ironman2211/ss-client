@@ -1,6 +1,7 @@
 import React from "react";
 
 const FriendText = ({ name, picture, text,time }) => {
+
   return (
     <div className="self-stretch flex flex-col items-start justify-start pt-[0rem] px-[0rem] pb-[2.437rem] gap-[0.562rem]">
       
