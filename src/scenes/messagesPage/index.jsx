@@ -57,16 +57,13 @@ const MessagesPage = () => {
 
   const handleChatUser = (user) => {
     if (user) {
-      console.log(user);
       if (privateChat.get(user._id)) {
         setchatUser(privateChat.get(user._id));
       } else {
         user.last_message = [];
         setchatUser(user);
       }
-      if (isMobileScreens) {
-        setclickedChatuser(!clickedChatuser);
-      }
+      setclickedChatuser(!clickedChatuser);
     }
   };
 
@@ -207,7 +204,6 @@ const MessagesPage = () => {
 
   const updatePrivateChats = async () => {
     try {
-      console.log("Startd");
       const response = await apiService.getAllPrivateChats(_id, token);
       const PVC = await response.json();
       setprivateChat(new Map(Object.entries(PVC)));
@@ -223,7 +219,6 @@ const MessagesPage = () => {
 
   useEffect(() => {
     updateChatScope();
-    console.log(privateChat);
   }, [privateChat, chats]);
   useEffect(() => {
     if (!userData.connect) handleSubmit();
@@ -231,16 +226,16 @@ const MessagesPage = () => {
 
   return (
     <div
-      className="w-screen h-screen bg-white"
+      className="w-screen h-screen "
       style={{ fontFamily: "poppins" }}
     >
       <Navbar />
       {/* <hr /> */}
-      <FlexBetween className="xl:px-14">
+      <FlexBetween className="xl:px-14 ">
         {isMobileScreens && clickedChatuser ? (
           <></>
         ) : (
-          <div className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw] sm:w-[40vw] w-[100vw] h-[85vh]   border-r-2 border-gray-200 md:p-5 px-8 py-5 ">
+          <div className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[85vh]   border-r-2 border-gray-200 md:p-5 px-8 py-5 ">
             <div className="h-full w-full flex flex-col justify-start ">
               <div className="flex  w-full h-12 overflow-y-scroll ">
                 {/* <input
@@ -283,28 +278,28 @@ const MessagesPage = () => {
         {(isMobileScreens && !clickedChatuser) ||
           (chatUser?._id && (
             // <form>
-            <section className="flex-1 xl:w-[40vw] w-[10vw] px-5 h-[85vh] justify-between   ">
+            <section className="flex flex-col px-5 h-[89vh] w-full   justify-between overflow-hidden pt-3 ">
               <FrameComponent chatUser={chatUser} handleBack={handleBack} />
               <ContainerContainer
                 chatUser={chatUser}
                 privateChat={privateChat}
                 setprivateChat={setprivateChat}
               />
-              <div className="w-full  flex items-center justify-center p-2 gap-5  ">
+              <div className="w-full  flex items-center justify-center p-2 gap-5 ">
                 <button className="bg-transparent outline-none w-12 text-black">
                   <AttachFileIcon />
                 </button>
                 <input
-                  className="w-10/12 px-4 py-3 outline-none text-black rounded-xl bg-gray-100 "
+                  className="w-10/12 px-4 py-3 outline-none text-black rounded-xl bg-gray-100 border-gray-200 border-2 "
                   value={userData.message}
                   placeholder="Enter your message"
                   onChange={handleSendChage}
                 />
                 <button
-                  className="bg-transparent outline-none  bg-green-300 twxt-white h-10 w-10 rounded-full"
+                  className="bg-transparent outline-none   twxt-white h-10 w-10 rounded-full"
                   onClick={sendPrivateMessage}
                 >
-                  <SendIcon />
+                  <SendIcon  className="text-green-800" />
                 </button>
               </div>
             </section>

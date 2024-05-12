@@ -11,7 +11,7 @@ const FriendText = ({ name, picture, text,time }) => {
         </div>
         <span className="text-sm font-semibold ">{name}</span>
       </div>
-      <span className="bg-gray-100 w-fit p-2 rounded-b-xl ml-10 text-xs rounded-tr-xl rounded-bl-xl">
+      <span className="bg-gray-200 w-fit p-2 rounded-b-xl ml-10 text-xs rounded-tr-xl rounded-bl-xl">
         {text}</span>
       <span className="inline-block w-fit font-semibold text-black-900 rounded-none rounded-br-xl ml-11 text-[.6rem]">
         {time}

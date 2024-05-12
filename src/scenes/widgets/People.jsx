@@ -12,15 +12,12 @@ const People = () => {
   const getUsers = async () => {
     const response = await apiService.getAllUsers(token);
     const data = await response.json();
-    console.log(friends);
     const arrayOfIds = friends.map((obj) => obj._id);
 
     const filterCurrUser = data.filter((user) => user._id !== _id);
     const filterFriends = filterCurrUser.filter(
       (obj) => !arrayOfIds.includes(obj._id)
     );
-
-    console.log(filterFriends);
     setUsers(filterFriends);
   };
 

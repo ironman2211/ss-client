@@ -24,7 +24,6 @@ const FriendListWidget = ({ userId }) => {
   const getFriends = async () => {
     const response = await apiService.getUserFriends(userId, token);
     const data = await response.json();
-    console.log(data);
     dispatch(setFriends({ friends: data }));
   };
 

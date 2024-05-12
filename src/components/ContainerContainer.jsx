@@ -52,8 +52,8 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
   };
 
   return (
-    <div className="w-full h-[65vh] overflow-y-auto" id="scrollableDiv">
-      <div className="flex-1 flex flex-col items-start justify-start gap-[0.5rem] max-w-full text-black">
+    <div className="w-full h-[70vh] overflow-y-auto " id="scrollableDiv">
+      <div className="flex-1 flex flex-col items-start justify-start gap-[0.5rem] max-w-full  ">
         {loadChat &&
           privateChat.get(chatUser._id) &&
           privateChat

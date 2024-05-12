@@ -4,7 +4,7 @@ import CallIcon from "@mui/icons-material/Call";
 const FrameComponent = ({ chatUser,handleBack }) => {
   console.log(chatUser);
   return (
-    <div className="flex w-full bg-gray-100 p-3  rounded-xl text-black justify-between ">
+    <div className="flex w-20rem bg-white  p-3  rounded-xl text-black justify-between border-gray-300 border-2 ">
       <div className="flex flex-row">
         <button className="bg-transparent outline-none w-12" onClick={handleBack}>
           <ArrowBackIcon className="text-3xl font-bold" />
