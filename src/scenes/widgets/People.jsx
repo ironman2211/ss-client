@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PeopleWidget from "./PeopleWidget";
 import { Box, CircularProgress, useMediaQuery } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 
 const People = () => {
   const [users, setUsers] = useState([]);
@@ -12,15 +12,12 @@ const People = () => {
   const getUsers = async () => {
     const response = await apiService.getAllUsers(token);
     const data = await response.json();
-    console.log(friends);
     const arrayOfIds = friends.map((obj) => obj._id);
 
     const filterCurrUser = data.filter((user) => user._id !== _id);
     const filterFriends = filterCurrUser.filter(
       (obj) => !arrayOfIds.includes(obj._id)
     );
-
-    console.log(filterFriends);
     setUsers(filterFriends);
   };
 

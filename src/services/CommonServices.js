@@ -35,6 +35,16 @@ export const apiService = {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  addUserToChats: async (chatId, token, loggedInUserId) => {
+    return fetch(`${API_BASE_URL}/users/${chatId}/chats`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: loggedInUserId }),
+    });
+  },
   getAllPosts: async (token) => {
     return fetch(`${API_BASE_URL}/posts`, {
       method: "GET",
@@ -118,6 +128,16 @@ export const apiService = {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(commentBody),
+    });
+  },
+  getAllPrivateChats: async (userId, token) => {
+    return fetch(`${API_BASE_URL}/users/chats/getAll`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: userId }),
     });
   },
 };

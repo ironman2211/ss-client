@@ -21,7 +21,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { apiService } from "apiHandled/common-services";
+import { apiService } from "services/CommonServices";
 import { FlexBetween, FlexCenter } from "components/Flex";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -52,7 +52,7 @@ const PostWidget = ({
   const isLiked = Boolean(likes[loggedInUserId]);
   const user = useSelector((state) => state.user);
   const likeCount = Object.keys(likes).length;
-  console.log();
+  // console.log();
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -84,14 +84,14 @@ const PostWidget = ({
   };
 
   const addComment = async () => {
-    console.log(userComment);
+    // console.log(userComment);
     const addComment = {
       id: user._id,
       comment: userComment,
       imageUrl: user.picturePath,
       name: user.firstName+"_"+user.lastName,
     };
-    console.log(addComment);
+    // console.log(addComment);
     const response = await apiService.addComment(postId, token, addComment);
     // const updatedPost = await response.json();
     // dispatch(setPost({ post: updatedPost }));
