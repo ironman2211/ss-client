@@ -1,4 +1,3 @@
-import { useMediaQuery } from "@mui/material";
 
 const timeAgo = (timestamp) => {
   const currentDate = new Date();
@@ -19,7 +18,7 @@ const timeAgo = (timestamp) => {
   interval = Math.floor(seconds / 86400);
   if (interval >= 1) {
     return interval === 1 ? `${interval} day ago` : `${interval} days ago`;
-  }
+  };
 
   interval = Math.floor(seconds / 3600);
   if (interval >= 1) {

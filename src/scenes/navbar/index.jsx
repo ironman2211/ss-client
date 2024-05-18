@@ -1,8 +1,10 @@
 import LightLogo from "../../assets/light.png";
 import DarkLogo from "../../assets/dark.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
-
+import ChatIcon from "@mui/icons-material/Chat";
+import HomeIcon from "@mui/icons-material/Home";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import {
   Box,
   IconButton,
@@ -14,6 +16,7 @@ import {
   useTheme,
   useMediaQuery,
   Button,
+  Modal,
 } from "@mui/material";
 import {
   Search,
@@ -23,18 +26,21 @@ import {
   Close,
   LinkedIn,
 } from "@mui/icons-material";
-import ChatIcon from '@mui/icons-material/Chat';
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
-import {FlexBetween} from "components/Flex";
+import { FlexBetween, FlexCenter } from "components/Flex";
 import ButtonOne from "components/common-comps/ButtonOne";
+import StickyFooter from "components/StickyFooter";
+import MyPostWidget from "scenes/widgets/MyPostWidget";
 
-const Navbar = () => {
+const Navbar = ({ isAuth }) => {
+  console.log(isAuth);
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
+  const { token } = useSelector;
 
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -48,127 +54,152 @@ const Navbar = () => {
   const background = theme.palette.background.default;
   const alt = theme.palette.background.alt;
 
-  const fullName = `${user.firstName} ${user.lastName}`;
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: isNonMobileScreens ? 600 : 350,
+    outline:"none",
+    // bgcolor: "background.paper",
+    // boxShadow: 24,
+  };
 
   const logOut = () => {
     window.localStorage.removeItem("token");
     dispatch(setLogout());
   };
-  return (
-    <FlexBetween padding=".1rem 6%" backgroundColor={alt}>
-      <FlexBetween gap="1.75rem">
-        <img
-          src={isDark() ? LightLogo : DarkLogo}
-          onClick={() => navigate("/home")}
-          style={{ height: "5rem", width: "6rem", cursor: "pointer" }}
-        />
-      </FlexBetween>
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  useEffect(() => {}, [window.location.pathname]);
+  if (isAuth)
+    return (
+      <>
+        <FlexBetween
+          width="100%"
+          backgroundColor={theme.palette.background.alt}
+          p="1rem 6%"
+          textAlign="center"
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
+          }}
+          style={{
+            justifyContent: isNonMobileScreens ? "" : "center",
+          }}
+        >
+          <p className="font-[Oswald] tracking-widest text-xl">
+            CONNECTI
+            <span className="text-cyan-400">FY</span>
+          </p>
+          {isNonMobileScreens && (
+            <FlexBetween className="w-[25rem]">
+              <IconButton onClick={handleOpen} cursor="pointer">
+                <AddAPhotoIcon sx={{ fontSize: "25px" }} />
+              </IconButton>
+              <ButtonOne
+                naviageTo="/home"
+                icon={<HomeIcon sx={{ fontSize: "25px" }} />}
+              />
+              <ButtonOne
+                naviageTo="/people"
+                icon={<PeopleAltIcon sx={{ fontSize: "25px" }} />}
+              />
 
-      {/* DESKTOP NAV */}
-      {isNonMobileScreens ? (
-        <FlexBetween gap="2rem">
-          <PeopleAltIcon
-            sx={{ fontSize: "25px" }}
-            onClick={() => navigate("/people")}
-            cursor="pointer"
-            style={
-              window.location.pathname === "/people"
-                ? { color: "#324ea8" }
-                : { color: theme.palette.mode }
-            }
-          />
-          <ChatIcon
-            sx={{ fontSize: "25px" }}
-            onClick={() => navigate("/message")}
-            cursor="pointer"
-            style={
-              window.location.pathname === "/message"
-                ? { color: "#324ea8" }
-                : { color: theme.palette.mode }
-            }
-          />
-          <IconButton onClick={() => dispatch(setMode())}>
-            {isDark() ? (
-              <DarkMode sx={{ fontSize: "25px" }} />
-            ) : (
-              <LightMode sx={{ color: dark, fontSize: "25px" }} />
-            )}
-          </IconButton>
-          <ButtonOne content="Log Out" mode={isDark()} onClick={()=>logOut()} />
+              <IconButton onClick={() => dispatch(setMode())}>
+                {isDark() ? (
+                  <DarkMode sx={{ fontSize: "25px" }} />
+                ) : (
+                  <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                )}
+              </IconButton>
+              <IconButton onClick={() => logOut()}>
+                <LogoutIcon />
+              </IconButton>
+            </FlexBetween>
+          )}
         </FlexBetween>
-      ) : (
-        <IconButton
-          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-        >
-          <Menu />
-        </IconButton>
-      )}
+        {!isNonMobileScreens && (
+          <>
+            <footer className="fixed bottom-0 left-0 right-0 z-50">
+              <FlexBetween
+                className="w-[20rem] px-5 py-2"
+                backgroundColor={theme.palette.background.alt}
+                width="100%"
+              >
+                <ButtonOne
+                  naviageTo="/home"
+                  icon={<HomeIcon sx={{ fontSize: "25px" }} />}
+                />
+                <ButtonOne
+                  naviageTo="/people"
+                  icon={<PeopleAltIcon sx={{ fontSize: "25px" }} />}
+                />
+                <IconButton onClick={handleOpen} cursor="pointer">
+                  <AddAPhotoIcon sx={{ fontSize: "25px" }} />
+                </IconButton>
 
-      {/* MOBILE NAV */}
-      {!isNonMobileScreens && isMobileMenuToggled && (
-        <Box
-          position="fixed"
-          right="0"
-          bottom="0"
-          height="100%"
-          zIndex="10"
-          maxWidth="500px"
-          minWidth="300px"
-          backgroundColor={background}
+                <ButtonOne
+                  naviageTo="/message"
+                  icon={<ChatIcon sx={{ fontSize: "25px" }} />}
+                />
+                {/* <IconButton onClick={() => dispatch(setMode())}>
+                  {isDark() ? (
+                    <DarkMode sx={{ fontSize: "25px" }} />
+                  ) : (
+                    <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                  )}
+                </IconButton> */}
+                <IconButton onClick={() => logOut()}>
+                  <LogoutIcon />
+                </IconButton>
+              </FlexBetween>
+            </footer>
+          </>
+        )}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
-          {/* CLOSE ICON */}
-          <Box display="flex" justifyContent="flex-end" p="1rem">
-            <IconButton
-              onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-            >
-              <Close />
-            </IconButton>
+          <Box sx={style}>
+            <MyPostWidget
+              picturePath={"https://i.pravatar.cc/300"}
+              marginBottom="1rem"
+            />
           </Box>
-
-          {/* MENU ITEMS */}
-          <FlexBetween
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            gap="3rem"
-          >
-            <IconButton
-              onClick={() => dispatch(setMode())}
-              sx={{ fontSize: "25px" }}
-            >
-              {theme.palette.mode === "dark" ? (
-                <DarkMode sx={{ fontSize: "25px" }} />
-              ) : (
-                <LightMode sx={{ color: dark, fontSize: "25px" }} />
-              )}
-            </IconButton>
-            <PeopleAltIcon
-              sx={{ fontSize: "25px" }}
-              onClick={() => navigate("/people")}
-              cursor="pointer"
-              style={
-                window.location.pathname === "/people"
-                  ? { color: "#324ea8" }
-                  : { color: theme.palette.mode }
-              }
-            />
-             <ChatIcon
-              sx={{ fontSize: "25px" }}
-              onClick={() => navigate("/message")}
-              cursor="pointer"
-              style={
-                window.location.pathname === "/message"
-                  ? { color: "#324ea8" }
-                  : { color: theme.palette.mode }
-              }
-            />
-            <ButtonOne content="Log Out" mode={isDark()} onClick={()=>logOut()} />
-          </FlexBetween>
-        </Box>
-      )}
-    </FlexBetween>
-  );
+        </Modal>
+      </>
+    );
+  else
+    return (
+      <FlexBetween
+        width="100%"
+        backgroundColor={theme.palette.background.alt}
+        p="1rem 6%"
+        textAlign="center"
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+        }}
+        style={{
+          justifyContent: isNonMobileScreens && isAuth ? "" : "center",
+        }}
+      >
+        <p className="font-[Oswald] tracking-widest text-xl">
+          CONNECTI
+          <span className="text-cyan-400">FY</span>
+        </p>
+      </FlexBetween>
+    );
 };
 
 export default Navbar;

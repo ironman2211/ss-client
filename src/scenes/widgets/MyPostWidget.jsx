@@ -11,6 +11,7 @@ import {
   useTheme,
   Button,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import { FlexBetween, FlexCenter, FlexStart } from "components/Flex";
 import Dropzone from "react-dropzone";
@@ -51,20 +52,25 @@ const MyPostWidget = () => {
     setUploading(false);
     window.location.reload();
   };
+  const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
 
   return (
     <WidgetWrapper>
-      <FlexBetween gap="1.5rem">
-        <UserImage image={picturePath} />
+      <FlexBetween>
+        <UserImage
+          image={picturePath}
+          size={isNonMobileScreens ? "4rem" : "15%"}
+        />
         <InputBase
           placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}
           value={post}
           sx={{
-            width: "100%",
-            backgroundColor: palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
+            width: isNonMobileScreens ? "85%" : "80%",
+            borderBottom: "1px solid gray",
+            // backgroundColor: palette.neutral.light,
+
+            padding: ".3rem",
           }}
         />
       </FlexBetween>
@@ -113,10 +119,10 @@ const MyPostWidget = () => {
         </Box>
       )}
 
-      <Divider sx={{ margin: "1.25rem 0" }} />
+      {/* <Divider sx={{ margin: "1.25rem 0" }} /> */}
 
       {!uploading ? (
-        <FlexBetween>
+        <FlexBetween style={{ marginTop: "2rem" }}>
           <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
             <ImageOutlined sx={{ color: mediumMain }} />
             <Typography
@@ -140,11 +146,11 @@ const MyPostWidget = () => {
           </Button>
         </FlexBetween>
       ) : (
-        <>
+        <div className="my-10 mx-2">
           <p>Uploading . . .</p>
 
           <LinearProgress />
-        </>
+        </div>
       )}
     </WidgetWrapper>
   );

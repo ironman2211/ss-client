@@ -9,6 +9,7 @@ const ImgAndPlaceHolder = ({src,alt,...props}) => {
   return (
     <img
       src={src}
+      className='h-full w-full'
       onError={handleImageError}
       alt={alt}
       {...props}

@@ -43,16 +43,19 @@ const MessagesPage = () => {
     message: "",
   });
 
+  const updateFriends = () => {
+    let transformedFriends = friends.map((friend) => ({
+      _id: friend._id,
+      name: friend.firstName + " " + friend.lastName,
+      picturePath: friend.picturePath,
+      status: null,
+    }));
+    setfilteredFriend(transformedFriends);
+  };
   useEffect(() => {
-    setfilteredFriend(
-      friends.map((friend) => ({
-        _id: friend._id,
-        name: friend.firstName + " " + friend.lastName,
-        picturePath: friend.picturePath,
-        status: null,
-      }))
-    );
+    updateFriends();
   }, []);
+  console.log(friends);
   // console.log(allFriends); ⚡ check
 
   const handleChatUser = (user) => {
@@ -182,9 +185,17 @@ const MessagesPage = () => {
   };
 
   const updateChatScope = () => {
+    console.log("🤣🤣🤣🤣");
+    console.log([...privateChat.keys()]);
+    let updatedFilteredFriend = filteredFriend;
+
     [...privateChat.keys()].forEach((id) => {
-      setfilteredFriend(filteredFriend.filter((friend) => friend._id != id));
+      updatedFilteredFriend = updatedFilteredFriend.filter(
+        (friend) => friend._id != id
+      );
     });
+    // setfilteredFriend(updatedFilteredFriend);
+    console.log(updatedFilteredFriend);
   };
   const sendPublicMessage = () => {
     if (stompClient) {
@@ -225,19 +236,15 @@ const MessagesPage = () => {
   }, [userData.connect, userData]);
 
   return (
-    <div
-      className="w-screen h-screen "
-      style={{ fontFamily: "poppins" }}
-    >
-      <Navbar />
+    <div className="w-screen h-screen " style={{ fontFamily: "poppins" }}>
       {/* <hr /> */}
-      <FlexBetween className="xl:px-14 ">
+      <FlexBetween className="xl:px-14 pt-14">
         {isMobileScreens && clickedChatuser ? (
           <></>
         ) : (
-          <div className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[85vh]   border-r-2 border-gray-200 md:p-5 px-8 py-5 ">
-            <div className="h-full w-full flex flex-col justify-start ">
-              <div className="flex  w-full h-12 overflow-y-scroll ">
+          <div className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[90vh]   border-r-2 border-gray-200 md:p-5 px-8 pt-5 ">
+            <div className=" gap-2 h-[87vh] py-5 w-full overflow-y-scroll ">
+              <div className="flex  w-full h-12 overflow-y-scroll  ">
                 {/* <input
                 className="w-full p-5 outline-none border-2 rounded-2xl"
                 placeholder="Search.."
@@ -259,11 +266,14 @@ const MessagesPage = () => {
                   />
                 ))}
 
-              <div className="flex  w-full h-12 mt-5  ">
-                <b className="text-xl font-semibold">Friends</b>
-              </div>
-              <hr className="w-full h-2" />
-
+              {filteredFriend && (
+                <>
+                  <div className="flex  w-full h-12 mt-5  ">
+                    <b className="text-xl font-semibold">Friends</b>
+                  </div>
+                  <hr className="w-full h-2" />
+                </>
+              )}
               {filteredFriend.map((friend, index) => (
                 <ChatCard
                   key={index}
@@ -278,7 +288,7 @@ const MessagesPage = () => {
         {(isMobileScreens && !clickedChatuser) ||
           (chatUser?._id && (
             // <form>
-            <section className="flex flex-col px-5 h-[89vh] w-full   justify-between overflow-hidden pt-3 ">
+            <section className="flex flex-col px-5 h-[87vh] w-full   justify-between overflow-hidden pt-3 ">
               <FrameComponent chatUser={chatUser} handleBack={handleBack} />
               <ContainerContainer
                 chatUser={chatUser}
@@ -299,7 +309,7 @@ const MessagesPage = () => {
                   className="bg-transparent outline-none   twxt-white h-10 w-10 rounded-full"
                   onClick={sendPrivateMessage}
                 >
-                  <SendIcon  className="text-green-800" />
+                  <SendIcon className="text-green-800" />
                 </button>
               </div>
             </section>

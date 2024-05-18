@@ -52,7 +52,7 @@ const UserWidget = ({ userId }) => {
   } = user;
   return (
     <WidgetWrapper>
-      <FlexCenter gap="2rem" padding="1rem">
+      <FlexCenter gap="2rem" padding="1rem" size="85px">
         <UserImage image={picturePath} size="85px" />
       </FlexCenter>
       <FlexCenter

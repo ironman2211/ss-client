@@ -1,12 +1,9 @@
 import * as React from "react";
 
-import Input from "@mui/material/Input";
-
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  OtherHouses,
   ShareOutlined,
 } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -16,9 +13,7 @@ import {
   Button,
   Divider,
   IconButton,
-  TextField,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { apiService } from "services/CommonServices";
@@ -57,7 +52,7 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
   const [userComment, setUserComment] = useState("");
-  
+
   const theme = useTheme();
   // console.log(comments);
   const patchLike = async () => {
@@ -89,7 +84,7 @@ const PostWidget = ({
       id: user._id,
       comment: userComment,
       imageUrl: user.picturePath,
-      name: user.firstName+"_"+user.lastName,
+      name: user.firstName + "_" + user.lastName,
     };
     // console.log(addComment);
     const response = await apiService.addComment(postId, token, addComment);
@@ -100,7 +95,7 @@ const PostWidget = ({
   };
 
   return (
-    <WidgetWrapper m="1.3rem 0">
+    <WidgetWrapper mb="1.3rem">
       <Friend
         friendId={postUserId}
         name={name}
@@ -167,42 +162,43 @@ const PostWidget = ({
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">
-          <Box style={{
-            // backgroundColor:"red",
-            padding:".3rem",
-            border:"1px solid gray",
-            borderRadius:".5rem",
-            margin:" 1rem 0",
-          }}>
-
-          <FlexBetween style={{ width: "100%" }}>
-            <input
-              label="Last Name"
-              name="lastName"
-              style={{
-                width: "90%",
-                padding: ".4rem",
-                outline:"none",
-                border:"none",
-                backgroundColor:"transparent",
-                color:
-                theme.palette.mode === "dark"
-                  ? palette.common.white
-                  : palette.common.black,
-              }}
-              value={userComment}
-              onChange={(e) => setUserComment(e.target.value)}
-              sx={{ gridColumn: "span 2" }}
-              placeholder="Add a comment..."
+          <Box
+            style={{
+              // backgroundColor:"red",
+              padding: ".3rem",
+              border: "1px solid gray",
+              borderRadius: ".5rem",
+              margin: " 1rem 0",
+            }}
+          >
+            <FlexBetween style={{ width: "100%" }}>
+              <input
+                label="Last Name"
+                name="lastName"
+                style={{
+                  width: "90%",
+                  padding: ".4rem",
+                  outline: "none",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color:
+                    theme.palette.mode === "dark"
+                      ? palette.common.white
+                      : palette.common.black,
+                }}
+                value={userComment}
+                onChange={(e) => setUserComment(e.target.value)}
+                sx={{ gridColumn: "span 2" }}
+                placeholder="Add a comment..."
               />
-            <Button onClick={addComment}>Comment</Button>
-          </FlexBetween>
-              </Box>
+              <Button onClick={addComment}>Comment</Button>
+            </FlexBetween>
+          </Box>
           <div
             style={{
               height: "16rem",
               // backgroundColor: "red",
-              overflow:"scroll"
+              overflow: "scroll",
             }}
           >
             {comments.map((comment, i) => (

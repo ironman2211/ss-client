@@ -12,10 +12,9 @@ const HomePage = () => {
 
   return (
     <Box>
-      <Navbar />
       <Box
         width="100%"
-        padding="2rem 6%"
+        padding="5.5rem 3%"
         display={isNonMobileScreens ? "flex" : "block"}
         gap="0.5rem"
         justifyContent="space-between"
@@ -30,7 +29,6 @@ const HomePage = () => {
         <Box
           flexBasis={isNonMobileScreens ? "50%" : undefined}
         >
-          <MyPostWidget picturePath={picturePath} />
           <PostsWidget userId={_id} />
         </Box>
         {isNonMobileScreens && (

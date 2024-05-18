@@ -16,7 +16,7 @@ const ChatCard = ({ user, didChat, handleclick }) => {
             user?.picturePath ? user?.picturePath : "https://i.pravatar.cc/300"
           }
         />
-        {user.status == "ONLINE" && (
+        {user.status === "ONLINE" && (
           <div className="absolute bottom-1 right-1  rounded-[50%] bg-green-400 w-[0.5rem] h-[0.5rem] z-[1]" />
         )}
       </button>
