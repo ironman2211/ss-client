@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import { apiService } from "services/CommonServices";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import WidgetWrapper from "components/WidgetWrapper";
 
 const PostsWidget = ({ userId, isProfile = false }) => {
@@ -64,7 +64,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           />
         )
       )}
-      {posts.length == 0 ? (
+      {posts.length === 0 ? (
         <Box>
           <WidgetWrapper>
             <b>Post Unavailable : (</b>

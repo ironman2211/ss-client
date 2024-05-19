@@ -25,6 +25,7 @@ import {
   Menu,
   Close,
   LinkedIn,
+  NoEncryption,
 } from "@mui/icons-material";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,7 +61,7 @@ const Navbar = ({ isAuth }) => {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: isNonMobileScreens ? 600 : 350,
-    outline:"none",
+    outline: "none",
     // bgcolor: "background.paper",
     // boxShadow: 24,
   };
@@ -96,8 +97,20 @@ const Navbar = ({ isAuth }) => {
             CONNECTI
             <span className="text-cyan-400">FY</span>
           </p>
+
+          <IconButton
+            sx={{
+              display: isNonMobileScreens ? "none" : "block",
+              position: "absolute",
+              top: ".7rem", // Adjust this value as needed
+              right: ".7rem", // // Adjust this value as needed
+            }}
+            onClick={() => logOut()}
+          >
+            <LogoutIcon />
+          </IconButton>
           {isNonMobileScreens && (
-            <FlexBetween className="w-[25rem]">
+            <FlexBetween className="w-[28rem]">
               <IconButton onClick={handleOpen} cursor="pointer">
                 <AddAPhotoIcon sx={{ fontSize: "25px" }} />
               </IconButton>
@@ -109,7 +122,10 @@ const Navbar = ({ isAuth }) => {
                 naviageTo="/people"
                 icon={<PeopleAltIcon sx={{ fontSize: "25px" }} />}
               />
-
+              <ButtonOne
+                naviageTo="/message"
+                icon={<ChatIcon sx={{ fontSize: "25px" }} />}
+              />
               <IconButton onClick={() => dispatch(setMode())}>
                 {isDark() ? (
                   <DarkMode sx={{ fontSize: "25px" }} />
@@ -123,6 +139,7 @@ const Navbar = ({ isAuth }) => {
             </FlexBetween>
           )}
         </FlexBetween>
+
         {!isNonMobileScreens && (
           <>
             <footer className="fixed bottom-0 left-0 right-0 z-50">
@@ -147,15 +164,13 @@ const Navbar = ({ isAuth }) => {
                   naviageTo="/message"
                   icon={<ChatIcon sx={{ fontSize: "25px" }} />}
                 />
-                {/* <IconButton onClick={() => dispatch(setMode())}>
+
+                <IconButton onClick={() => dispatch(setMode())}>
                   {isDark() ? (
                     <DarkMode sx={{ fontSize: "25px" }} />
                   ) : (
                     <LightMode sx={{ color: dark, fontSize: "25px" }} />
                   )}
-                </IconButton> */}
-                <IconButton onClick={() => logOut()}>
-                  <LogoutIcon />
                 </IconButton>
               </FlexBetween>
             </footer>
@@ -168,10 +183,7 @@ const Navbar = ({ isAuth }) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <MyPostWidget
-              picturePath={"https://i.pravatar.cc/300"}
-              marginBottom="1rem"
-            />
+            <MyPostWidget />
           </Box>
         </Modal>
       </>

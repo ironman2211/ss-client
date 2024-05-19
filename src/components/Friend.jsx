@@ -20,7 +20,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
   // const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-console.log(useSelector((state) => state.user));
+// console.log(useSelector((state) => state.user));
   const isFriend = friends.find((friend) => friend?._id === friendId);
   const patchFriend = async () => {
     const response = await apiService.getAllFriends(friendId,token);

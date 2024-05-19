@@ -7,7 +7,6 @@ import {
   ShareOutlined,
 } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   Box,
   Button,
@@ -17,13 +16,13 @@ import {
   useTheme,
 } from "@mui/material";
 import { apiService } from "services/CommonServices";
-import { FlexBetween, FlexCenter } from "components/Flex";
+import { FlexBetween } from "components/Flex";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
-import { isNonMobileScreens, timeAgo } from "utils/helper";
+import {  timeAgo } from "utils/helper";
 import Comment from "components/Comment";
 import DeleteModal from "components/common-comps/DeleteModal";
 
@@ -74,7 +73,7 @@ const PostWidget = ({
   };
 
   const handleClose = (close) => {
-    if (close == 1) handleDelete();
+    if (close === 1) handleDelete();
     setOpen(false);
   };
 
@@ -88,9 +87,9 @@ const PostWidget = ({
     };
     // console.log(addComment);
     const response = await apiService.addComment(postId, token, addComment);
-    // const updatedPost = await response.json();
+    const updatedPost = await response.json();
     // dispatch(setPost({ post: updatedPost }));
-    // window.location.reload();
+    window.location.reload();
     //APi to add comment
   };
 
@@ -196,7 +195,8 @@ const PostWidget = ({
           </Box>
           <div
             style={{
-              height: "16rem",
+              maxHeight: "16rem",
+              height:"fit-content",
               // backgroundColor: "red",
               overflow: "scroll",
             }}

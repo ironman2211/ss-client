@@ -14,9 +14,7 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
   };
 
   const getAllPrivateChats = async () => {
-    console.log(chatUser);
     if (privateChat.get(chatUser._id)) {
-      console.log("hann chi");
       const user = privateChat.get(chatUser._id);
       user.last_message = await getAllChats();
       setprivateChat(privateChat.set(chatUser._id, user), setloadChat(true));
@@ -74,7 +72,7 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
                 <div key={index} className=" w-full">
                   {/* Render day divider if necessary */}
                   {showDayDivider && (
-                    <div className="text-center text-gray-500 mt-2 mb-1">
+                    <div className="text-center text-gray-500  my-2 text-[.6rem] sm:text-[.8rem]">
                       {formatDate(chat.date)}
                     </div>
                   )}

@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import { apiService } from "services/CommonServices";
 import LinearProgress from "@mui/material/LinearProgress";
+import { useNavigate } from "react-router-dom";
 
 const MyPostWidget = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const MyPostWidget = () => {
   const token = useSelector((state) => state.token);
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  const navigate = useNavigate();
 
   const handlePost = async () => {
     setUploading(true);
@@ -50,6 +52,8 @@ const MyPostWidget = () => {
     setImage(null);
     setPost("");
     setUploading(false);
+    navigate("/home");
+
     window.location.reload();
   };
   const isNonMobileScreens = useMediaQuery("(min-width: 650px)");

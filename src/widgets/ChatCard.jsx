@@ -1,8 +1,11 @@
+import { useTheme } from "@emotion/react";
 import React from "react";
 
 const ChatCard = ({ user, didChat, handleclick }) => {
   //   console.log("Fucker");
   if (didChat) console.log(user);
+  
+  const theme = useTheme();
   return (
     <div
       className="flex flex-row items-center justify-between lg:justify-evenly w-full h-20 cursor-pointer  "
@@ -26,17 +29,17 @@ const ChatCard = ({ user, didChat, handleclick }) => {
         </b>
         <div className=" text-[0.70rem] leading-[0.75rem] text-gray-800 inline-block ">
           {/* {user.bio ? user.bio : "No Bio Available"} */}
-          {didChat
-            ? user.last_message[user.last_message.length - 1].message
-            : "No Bio Available"}
+          <p className={`text-${theme.palette.mode === "dark" ? "white" : "black"}`}>
+            {didChat
+              ? user.last_message[user.last_message.length - 1].message
+              : "No Bio Available"}
+          </p>
         </div>
       </div>
       {didChat ? (
         <div className="flex flex-col items-end justify-start gap-2">
           <div className="text-[.6rem] mt-2">2 min ago</div>
-          <div className="w-[1.375rem] h-[1.375rem] relative text-white rounded-full flex items-center justify-center">
-            
-          </div>
+          <div className="w-[1.375rem] h-[1.375rem] relative text-white rounded-full flex items-center justify-center"></div>
         </div>
       ) : (
         <div className="flex flex-col items-end justify-start gap-2 w-14"></div>

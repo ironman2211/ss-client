@@ -21,6 +21,7 @@ import { apiService } from "services/CommonServices.js";
 import { setChats } from "state";
 import { FlexBetween } from "components/Flex.jsx";
 import WidgetWrapper from "components/WidgetWrapper.jsx";
+import { useTheme } from "@emotion/react";
 
 var stompClient = null;
 const MessagesPage = () => {
@@ -56,8 +57,6 @@ const MessagesPage = () => {
   useEffect(() => {
     updateFriends();
   }, []);
-  console.log(friends);
-  // console.log(allFriends); ⚡ check
 
   const handleChatUser = (user) => {
     if (user) {
@@ -94,28 +93,27 @@ const MessagesPage = () => {
 
       updatePrivateChats();
     }
-    // console.log(userData);
+    // (userData);
   };
   const userJoin = () => {
     let chatMessage = {
       sender: userData.userId,
       status: "JOIN",
     };
-    // console.log(chatMessage);
     stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
   };
   const onPublicMessageReceived = (payload) => {
     const payLoadData = JSON.parse(payload.body);
     switch (payLoadData.status) {
       case "JOIN":
-        // console.log(privateChat.get(payLoadData.sender));
+        // (privateChat.get(payLoadData.sender));
         // privateChat.set(payLoadData.sender, []);
         // // setprivateChat(new Map(privateChat));
         if (privateChat.get(payLoadData.sender) == undefined) {
           privateChat.set(payLoadData.sender, []);
           setprivateChat(new Map(privateChat));
         }
-        // console.log(privateChat);
+        // (privateChat);
         break;
       case "MESSAGE":
         publicChat.push(payLoadData);
@@ -134,7 +132,7 @@ const MessagesPage = () => {
   }, [receivedMessage]);
 
   const addtoPrivateChat = async () => {
-    // console.log(payLoadData);
+    // (payLoadData);
     if (privateChat.get(receivedMessage.sender)) {
       setprivateChat((prevPrivateChat) => {
         const updatedPrivateChat = new Map(prevPrivateChat);
@@ -185,9 +183,9 @@ const MessagesPage = () => {
     }
   };
 
+  const theme = useTheme();
   const updateChatScope = () => {
-    console.log("🤣🤣🤣🤣");
-    console.log([...privateChat.keys()]);
+   
     let updatedFilteredFriend = filteredFriend;
 
     [...privateChat.keys()].forEach((id) => {
@@ -196,7 +194,7 @@ const MessagesPage = () => {
       );
     });
     // setfilteredFriend(updatedFilteredFriend);
-    console.log(updatedFilteredFriend);
+  
   };
   const sendPublicMessage = () => {
     if (stompClient) {
@@ -211,7 +209,7 @@ const MessagesPage = () => {
   };
 
   const onError = () => {
-    // console.log("Error");
+    // ("Error");
   };
 
   const updatePrivateChats = async () => {
@@ -220,7 +218,6 @@ const MessagesPage = () => {
       const PVC = await response.json();
       setprivateChat(new Map(Object.entries(PVC)));
     } catch (error) {
-      console.log(error + "Error in Updating Private chats");
     }
   };
   const handleBack = () => {
@@ -238,15 +235,18 @@ const MessagesPage = () => {
 
   return (
     <div
-      className="w-screen h-[93vh]  bg-red-400 absolute top-[7vh]"
+      className="w-screen h-[93vh] fixed sm:top-[9vh] top-[7vh] "
       style={{ fontFamily: "poppins" }}
     >
       {/* <hr /> */}
-      <FlexBetween className="sm:px-14 py-10">
+      <FlexBetween className="lg:px-14 lg:pt-5 sm:p-3">
         {isMobileScreens && clickedChatuser ? (
           <></>
         ) : (
-          <WidgetWrapper className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[86vh]   border-r-2 border-gray-200 md:p-5 px-8 ">
+          <WidgetWrapper
+            theme={theme}
+            className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[86vh]     "
+          >
             <div className=" gap-2 h-[87vh] py-5 w-full overflow-y-scroll ">
               <div className="flex  w-full h-12 overflow-y-scroll  ">
                 {/* <input
@@ -292,7 +292,7 @@ const MessagesPage = () => {
         {(isMobileScreens && !clickedChatuser) ||
           (chatUser?._id && (
             // <form>
-            <section className="flex flex-col px-5 h-[87vh] w-full   justify-between overflow-hidden ">
+            <section className="flex flex-col  h-[87vh] w-full   justify-between overflow-hidden  sm:px-5  p-5 sm:p-0">
               <FrameComponent chatUser={chatUser} handleBack={handleBack} />
               <ContainerContainer
                 chatUser={chatUser}
@@ -300,11 +300,15 @@ const MessagesPage = () => {
                 setprivateChat={setprivateChat}
               />
               <div className="w-full  flex items-center justify-center p-2 gap-5 ">
-                <button className="bg-transparent outline-none w-12 text-black">
+                <button
+                  className={`bg-transparent outline-none w-12 text-${
+                    theme.palette.mode === "dark" ? "white" : "black"
+                  } `}
+                >
                   <AttachFileIcon />
                 </button>
                 <input
-                  className="w-10/12 px-4 py-3 outline-none text-black rounded-xl bg-gray-100 border-gray-200 border-2 "
+                  className="w-11/12 px-4 py-2 outline-none text-black rounded-xl  border-gray-200 border-2 "
                   value={userData.message}
                   placeholder="Enter your message"
                   onChange={handleSendChage}

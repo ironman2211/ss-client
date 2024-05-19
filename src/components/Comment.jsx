@@ -6,7 +6,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 const Comment = ({ comment }) => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  console.log(comment);
   const navigate=useNavigate();
   return (
     <>
