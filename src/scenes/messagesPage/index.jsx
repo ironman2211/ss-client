@@ -20,6 +20,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { apiService } from "services/CommonServices.js";
 import { setChats } from "state";
 import { FlexBetween } from "components/Flex.jsx";
+import WidgetWrapper from "components/WidgetWrapper.jsx";
 
 var stompClient = null;
 const MessagesPage = () => {
@@ -236,13 +237,16 @@ const MessagesPage = () => {
   }, [userData.connect, userData]);
 
   return (
-    <div className="w-screen h-screen " style={{ fontFamily: "poppins" }}>
+    <div
+      className="w-screen h-[93vh]  bg-red-400 absolute top-[7vh]"
+      style={{ fontFamily: "poppins" }}
+    >
       {/* <hr /> */}
-      <FlexBetween className="xl:px-14 pt-14">
+      <FlexBetween className="sm:px-14 py-10">
         {isMobileScreens && clickedChatuser ? (
           <></>
         ) : (
-          <div className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[90vh]   border-r-2 border-gray-200 md:p-5 px-8 pt-5 ">
+          <WidgetWrapper className="flex flex-col items-start justify-start xl:w-[22vw] md:w-[38vw]  w-[100vw] h-[86vh]   border-r-2 border-gray-200 md:p-5 px-8 ">
             <div className=" gap-2 h-[87vh] py-5 w-full overflow-y-scroll ">
               <div className="flex  w-full h-12 overflow-y-scroll  ">
                 {/* <input
@@ -283,12 +287,12 @@ const MessagesPage = () => {
                 />
               ))}
             </div>
-          </div>
+          </WidgetWrapper>
         )}
         {(isMobileScreens && !clickedChatuser) ||
           (chatUser?._id && (
             // <form>
-            <section className="flex flex-col px-5 h-[87vh] w-full   justify-between overflow-hidden pt-3 ">
+            <section className="flex flex-col px-5 h-[87vh] w-full   justify-between overflow-hidden ">
               <FrameComponent chatUser={chatUser} handleBack={handleBack} />
               <ContainerContainer
                 chatUser={chatUser}
