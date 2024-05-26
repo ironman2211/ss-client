@@ -1,10 +1,16 @@
 import { PersonAddOutlined } from "@mui/icons-material";
-import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
 import UserImage from "./UserImage";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 import { apiService } from "services/CommonServices";
 import { FlexBetween } from "./Flex";
 const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
@@ -14,31 +20,32 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  console.log(friends);
 
   const { palette } = useTheme();
   // const primaryLight = palette.primary.light;
   // const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-// console.log(useSelector((state) => state.user));
+  // console.log(useSelector((state) => state.user));
   const isFriend = friends.find((friend) => friend?._id === friendId);
   const patchFriend = async () => {
-    const response = await apiService.getAllFriends(friendId,token);
+    const response = await apiService.patchFriend(_id,friendId, token);
     const data = await response.json();
     dispatch(setFriends({ friends: data }));
   };
 
   return (
     <FlexBetween>
-      <FlexBetween gap="1rem">
-        <UserImage image={userPicturePath} size="50px" />
+      <FlexBetween gap=".8rem">
+        <UserImage image={userPicturePath} size="40px" />
         <Box
           onClick={() => {
             navigate(`/profile/${friendId}`);
             navigate(0);
           }}
           style={{
-            cursor:"pointer"
+            cursor: "pointer",
           }}
         >
           <Typography
@@ -54,25 +61,30 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, occupation }) => {
           </Typography>
         </Box>
       </FlexBetween>
-      {_id !== friendId && (<Button
-        sx={{
-          fontSize: ".8rem",
-          textTransform: "capitalize",
-          display: "flex",
-          alignItems: "center",
-          gap: ".5rem",
-          justifyContent: "center",
-          
-        }}
-        onClick={() => patchFriend()}
-      >
-        {isFriend ? <CheckIcon sx={{color:"red"}}/> : <PersonAddOutlined color="red" />}
-        {
-          isFriend ? (<Typography color="red">Following</Typography>) : (<Typography> Follow</Typography>)
-        }
-
-
-      </Button>)}
+      {_id !== friendId && (
+        <Button
+          sx={{
+            fontSize: ".8rem",
+            textTransform: "capitalize",
+            display: "flex",
+            alignItems: "center",
+            gap: ".5rem",
+            justifyContent: "center",
+          }}
+          onClick={() => patchFriend()}
+        >
+          {/* {isFriend ? (
+            <CheckIcon sx={{ color: "green" }} />
+          ) : (
+            <PersonAddOutlined color="red" />
+          )} */}
+          {isFriend ? (
+            <Typography color="red">Unfollow</Typography>
+          ) : (
+            <Typography>Follow </Typography>
+          )}
+        </Button>
+      )}
     </FlexBetween>
   );
 };

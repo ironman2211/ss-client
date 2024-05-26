@@ -3,6 +3,7 @@ import FriendText from "../widgets/FriendText";
 import MyText from "../widgets/MyText";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 
 const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
   const { _id } = useSelector((state) => state.user);
@@ -18,7 +19,7 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
       const user = privateChat.get(chatUser._id);
       user.last_message = await getAllChats();
       setprivateChat(privateChat.set(chatUser._id, user), setloadChat(true));
-    }
+    } else setloadChat(true);
   };
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
   return (
     <div className="w-full h-[70vh] overflow-y-auto " id="scrollableDiv">
       <div className="flex-1 flex flex-col items-start justify-start gap-[0.5rem] max-w-full  ">
-        {loadChat &&
+        {loadChat ? (
           privateChat.get(chatUser._id) &&
           privateChat
             .get(chatUser._id)
@@ -90,7 +91,12 @@ const ContainerContainer = ({ chatUser, privateChat, setprivateChat }) => {
                   )}
                 </div>
               );
-            })}
+            })
+        ) : (
+          <div className="w-full h-[65vh] flex items-center justify-center">
+            <CircularProgress />
+          </div>
+        )}
       </div>
     </div>
   );

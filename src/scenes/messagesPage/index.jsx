@@ -2,6 +2,7 @@ import {
   BottomNavigation,
   Box,
   Button,
+  CircularProgress,
   TextField,
   useMediaQuery,
 } from "@mui/material";
@@ -150,7 +151,7 @@ const MessagesPage = () => {
   };
 
   const sendPrivateMessage = async () => {
-    if (stompClient) {
+    if (userData.message.trim() && stompClient) {
       let chatMessage = {
         sender: userData.userId,
         message: userData.message,
@@ -158,34 +159,38 @@ const MessagesPage = () => {
         status: "SEND",
         date: new Date(),
       };
-
-      // ADD to private_message
-      if (!privateChat.get(chatUser._id)) {
-        privateChat.set(chatUser._id, chatUser);
-        setprivateChat(new Map(privateChat));
-      }
-      // UPDATE private message array
-      if (userData.userId !== chatUser._id) {
-        setprivateChat((prevPrivateChat) => {
-          const updatedPrivateChat = new Map(prevPrivateChat);
-          const x = updatedPrivateChat.get(chatUser._id);
-          if (x) {
-            x.last_message.push(chatMessage);
-          }
-          return updatedPrivateChat;
-        });
-      }
-      // SEND message
+  
+      // Update privateChat with the new message
+      setprivateChat((prevPrivateChat) => {
+        const updatedPrivateChat = new Map(prevPrivateChat);
+  
+        if (updatedPrivateChat.has(chatUser._id)) {
+          // If chatUser already has messages, append the new message
+          let chat = updatedPrivateChat.get(chatUser._id);
+          chat.last_message.push(chatMessage);
+        } else {
+          // If chatUser does not exist, initialize with the new message
+          chatUser.last_message = [chatMessage];
+          updatedPrivateChat.set(chatUser._id, chatUser);
+        }
+  
+        return updatedPrivateChat;
+      });
+  
+      // Send the message through stompClient
       stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
-      userData.message = "";
-      setUserData(userData);
+  
+      // Clear the message input
+      setUserData({ ...userData, message: "" });
+  
+      // Update chat scope (if necessary)
       updateChatScope();
     }
   };
+  
 
   const theme = useTheme();
   const updateChatScope = () => {
-   
     let updatedFilteredFriend = filteredFriend;
 
     [...privateChat.keys()].forEach((id) => {
@@ -194,7 +199,6 @@ const MessagesPage = () => {
       );
     });
     // setfilteredFriend(updatedFilteredFriend);
-  
   };
   const sendPublicMessage = () => {
     if (stompClient) {
@@ -217,8 +221,7 @@ const MessagesPage = () => {
       const response = await apiService.getAllPrivateChats(_id, token);
       const PVC = await response.json();
       setprivateChat(new Map(Object.entries(PVC)));
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   const handleBack = () => {
     if (isMobileScreens) {
@@ -259,16 +262,22 @@ const MessagesPage = () => {
                 </div>
               </div>
               {/* <hr className="w-full h-2" /> */}
-              {[...privateChat.keys()]
-                .filter((key) => key != userData.userId)
-                .map((_id, index) => (
-                  <ChatCard
-                    key={index}
-                    didChat={true}
-                    user={privateChat.get(_id)}
-                    handleclick={handleChatUser}
-                  />
-                ))}
+              {[...privateChat.keys()].length > 0 ? (
+                [...privateChat.keys()]
+                  .filter((key) => key != userData.userId)
+                  .map((_id, index) => (
+                    <ChatCard
+                      key={index}
+                      didChat={true}
+                      user={privateChat.get(_id)}
+                      handleclick={handleChatUser}
+                    />
+                  ))
+              ) : (
+                <div className="w-fulll h-full flex items-center justify-center">
+                  <CircularProgress />
+                </div>
+              )}
 
               {filteredFriend && (
                 <>
@@ -317,7 +326,13 @@ const MessagesPage = () => {
                   className="bg-transparent outline-none   twxt-white h-10 w-10 rounded-full"
                   onClick={sendPrivateMessage}
                 >
-                  <SendIcon className="text-green-800" />
+                  <SendIcon
+                    className={
+                      userData.message === ""
+                        ? "text-gray-800"
+                        : "text-green-800"
+                    }
+                  />
                 </button>
               </div>
             </section>

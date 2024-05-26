@@ -28,11 +28,11 @@ const timeAgo = (timestamp) => {
   interval = Math.floor(seconds / 60);
   if (interval >= 1) {
     return interval === 1
-      ? `${interval} minute ago`
-      : `${interval} minutes ago`;
+      ? `${interval} min ago`
+      : `${interval} mins ago`;
   }
 
-  return `${Math.floor(seconds)} seconds ago`;
+  return `${Math.floor(seconds)} sec ago`;
 };
 
 

@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
@@ -22,9 +21,13 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
-import {  timeAgo } from "utils/helper";
+import { timeAgo } from "utils/helper";
 import Comment from "components/Comment";
 import DeleteModal from "components/common-comps/DeleteModal";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import PlaceholderImage from "../../assets/glass.png"; // Import your placeholder image
+import DescriptionWithLinks from "./DescriptionWithLinks";
 
 const PostWidget = ({
   postId,
@@ -46,14 +49,12 @@ const PostWidget = ({
   const isLiked = Boolean(likes[loggedInUserId]);
   const user = useSelector((state) => state.user);
   const likeCount = Object.keys(likes).length;
-  // console.log();
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
   const [userComment, setUserComment] = useState("");
 
   const theme = useTheme();
-  // console.log(comments);
   const patchLike = async () => {
     const response = await apiService.updateLike(postId, token, loggedInUserId);
     const updatedPost = await response.json();
@@ -78,19 +79,15 @@ const PostWidget = ({
   };
 
   const addComment = async () => {
-    // console.log(userComment);
     const addComment = {
       id: user._id,
       comment: userComment,
       imageUrl: user.picturePath,
-      name: user.firstName + "_" + user.lastName,
+      name: `${user.firstName}+" "+${user.lastName}`,
     };
-    // console.log(addComment);
     const response = await apiService.addComment(postId, token, addComment);
     const updatedPost = await response.json();
-    // dispatch(setPost({ post: updatedPost }));
     window.location.reload();
-    //APi to add comment
   };
 
   return (
@@ -102,18 +99,37 @@ const PostWidget = ({
         userPicturePath={userPicturePath}
         occupation={occupation}
       />
-      <Typography color={main} sx={{ m: "1rem 0" }}>
+      <DescriptionWithLinks
+        description={description}
+        linkColor={theme.palette.mode === "dark" ? "cyan" : "#0390fc"}
+      />
+
+      {/* <Typography color={main} sx={{ m: "1rem 0" }} >
         {description}
-      </Typography>
-      <Divider />
+      </Typography> */}
+      {/* <Divider /> */}
       {picturePath && (
-        <img
-          width="100%"
-          height="auto"
-          alt="post"
-          style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={apiService.getImages(picturePath)}
-        />
+        <div
+          style={{ position: "relative", minHeight: "10rem", minWidth: "100%" }}
+        >
+          <LazyLoadImage
+            width="100%"
+            height="auto"
+            alt="post"
+            style={{
+              borderRadius: "0.8rem",
+              marginTop: "0.8rem",
+              minHeight: "18rem",
+              minWidth: "100%",
+            }}
+            src={apiService.getImages(picturePath)}
+            className={
+              theme.palette.mode === "dark"
+                ? "dark-placeholder"
+                : "light-placeholder"
+            }
+          />
+        </div>
       )}
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
@@ -163,7 +179,6 @@ const PostWidget = ({
         <Box mt="0.5rem">
           <Box
             style={{
-              // backgroundColor:"red",
               padding: ".3rem",
               border: "1px solid gray",
               borderRadius: ".5rem",
@@ -196,16 +211,14 @@ const PostWidget = ({
           <div
             style={{
               maxHeight: "16rem",
-              height:"fit-content",
-              // backgroundColor: "red",
+              height: "fit-content",
               overflow: "scroll",
             }}
           >
             {comments.map((comment, i) => (
-              <Comment comment={comment} />
+              <Comment key={i} comment={comment} />
             ))}
           </div>
-          {/* <Divider /> */}
         </Box>
       )}
       <DeleteModal open={open} handleClose={handleClose} />

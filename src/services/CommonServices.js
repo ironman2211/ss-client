@@ -51,8 +51,8 @@ export const apiService = {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
-  getAllFriends: async (friendId, token) => {
-    return fetch(`${API_BASE_URL}/users/${friendId}/${friendId}`, {
+  patchFriend: async (userId,friendId, token) => {
+    return fetch(`${API_BASE_URL}/users/${userId}/${friendId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,

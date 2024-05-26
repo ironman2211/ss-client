@@ -35,3 +35,45 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.light-placeholder {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(224, 224, 224, 0.8); /* Light mode placeholder background color */
+  border-radius: 0.8rem;
+  animation: pulse-light 1.5s infinite;
+}
+
+@keyframes pulse-light {
+  0% {
+    background-color: rgba(224, 224, 224, 0.8); /* Light mode background color */
+  }
+  50% {
+    background-color: rgba(240, 240, 240, 0.8); /* Light mode background color */
+  }
+  100% {
+    background-color: rgba(224, 224, 224, 0.8); /* Light mode background color */
+  }
+}
+
+.dark-placeholder {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(48, 48, 48, 0.8); /* Dark mode placeholder background color */
+  border-radius: 0.8rem;
+  animation: pulse-dark 1.5s infinite;
+}
+
+@keyframes pulse-dark {
+  0% {
+    background-color: rgba(48, 48, 48, 0.8); /* Dark mode background color */
+  }
+  50% {
+    background-color: rgba(64, 64, 64, 0.8); /* Dark mode background color */
+  }
+  100% {
+    background-color: rgba(48, 48, 48, 0.8); /* Dark mode background color */
+  }
+}

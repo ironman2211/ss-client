@@ -3,6 +3,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import CallIcon from "@mui/icons-material/Call";
 import WidgetWrapper from "./WidgetWrapper";
 import { useTheme } from "@emotion/react";
+import ImgAndPlaceHolder from "./ImgAndPlaceHolder";
 const FrameComponent = ({ chatUser, handleBack }) => {
 
 
@@ -27,7 +28,7 @@ const FrameComponent = ({ chatUser, handleBack }) => {
           <ArrowBackIcon className="text-3xl font-bold" />
         </button>
         <div className="w-9 h-9 md:w-10 md:h-10 rounded-full">
-          <img
+          <ImgAndPlaceHolder
             src={chatUser.picturePath}
             className="w-full h-full rounded-full"
           />
